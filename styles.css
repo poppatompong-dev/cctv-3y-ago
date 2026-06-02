@@ -2191,3 +2191,94 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 0.88rem;
     }
 }
+
+/* Premium CSS-only Hover Tooltips */
+[data-tooltip] {
+    position: relative;
+    cursor: pointer;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background-color: #072854;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: normal;
+    width: 250px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 9999;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #072854 transparent transparent transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+[data-tooltip]:hover::before {
+    opacity: 1;
+}
+
+@media (min-width: 769px) {
+    .table-truncate {
+        max-width: 130px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+/* Premium Global Footer */
+.app-footer {
+    margin-top: 40px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+.app-footer .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.app-footer .credit {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+.app-footer .officer-name {
+    font-weight: 600;
+    color: var(--primary-light);
+}
+

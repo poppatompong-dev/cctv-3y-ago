@@ -883,7 +883,7 @@ function renderProjectsTable() {
         tr.innerHTML = `
             <td style="font-weight: 500;">${item.year}</td>
             <td class="font-outfit" style="color:var(--text-secondary); font-weight:600;">${item.order}</td>
-            <td style="font-weight: 600; white-space: normal; min-width: 250px; max-width: 320px; color:var(--primary); line-height:1.35;">${item.name}</td>
+            <td data-tooltip="${item.desc}" style="font-weight: 600; white-space: normal; min-width: 250px; max-width: 320px; color:var(--primary); line-height:1.35;">${item.name}</td>
             <td style="color:var(--text-secondary); font-weight: 500;">${item.jobtype}</td>
             <td class="font-outfit" style="text-align:right; font-weight:600;">${displayCameras}</td>
             <td class="font-outfit" style="text-align:right; font-weight:600;">${displayPoles}</td>
@@ -1360,9 +1360,9 @@ function renderCablingTable() {
             <td data-label="จำนวนกล้อง" class="font-outfit" style="text-align:right; font-weight:600;">${project.cameras}</td>
             <td data-label="งบซ่อมสายสัญญาณ" class="font-outfit" style="text-align:right; font-weight:700; color:var(--primary-light);">${simBudget.toLocaleString()}</td>
             <td data-label="งบเฉลี่ยต่อกล้อง" class="font-outfit" style="text-align:right; font-weight:600;">${avgCost.toLocaleString()}</td>
-            <td data-label="สาเหตุหลักของปัญหา" style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4;">${analysis.rootCause}</td>
-            <td data-label="ความเสี่ยงหากละเลย" style="font-size:0.75rem; color:#991b1b; font-weight:500; line-height:1.4;">${analysis.risk}</td>
-            <td data-label="ข้อเสนอแนวทางแก้ไข" style="font-size:0.75rem; color:#15803d; font-weight:500; line-height:1.4;">${analysis.proposal}</td>
+            <td data-label="สาเหตุหลักของปัญหา" class="table-truncate" data-tooltip="${analysis.rootCause}" style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4;">${analysis.rootCause}</td>
+            <td data-label="ความเสี่ยงหากละเลย" class="table-truncate" data-tooltip="${analysis.risk}" style="font-size:0.75rem; color:#991b1b; font-weight:500; line-height:1.4;">${analysis.risk}</td>
+            <td data-label="ข้อเสนอแนวทางแก้ไข" class="table-truncate" data-tooltip="${analysis.proposal}" style="font-size:0.75rem; color:#15803d; font-weight:500; line-height:1.4;">${analysis.proposal}</td>
             <td data-label="ระดับความเร่งด่วน" style="text-align:center;"><span class="${urgencyBadge}" style="font-size:0.7rem; padding:2px 8px;">${analysis.urgency}</span></td>
         `;
         tbody.appendChild(tr);
