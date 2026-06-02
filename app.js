@@ -469,13 +469,13 @@ function initTrendChart() {
     const options = {
         series: [
             {
-                name: 'งบประมาณดั้งเดิม (ล้านบาท)',
+                name: 'งบประมาณจำลอง (ล้านบาท)',
                 type: 'column',
                 data: [1.900, 1.259, 2.513]
             },
             {
-                name: 'งบประมาณจำลอง (ล้านบาท)',
-                type: 'column',
+                name: 'งบประมาณดั้งเดิม (ล้านบาท)',
+                type: 'line',
                 data: [1.900, 1.259, 2.513]
             },
             {
@@ -492,7 +492,8 @@ function initTrendChart() {
             fontFamily: 'Sarabun, sans-serif'
         },
         stroke: {
-            width: [0, 0, 4],
+            width: [0, 3, 4],
+            dashArray: [0, 5, 0], // Dashed line for Series 1 (Original Budget)
             curve: 'smooth'
         },
         plotOptions: {
@@ -501,13 +502,13 @@ function initTrendChart() {
                 borderRadius: 4
             }
         },
-        colors: ['#cbd5e1', '#0c4a7e', '#f97316'], // Grey baseline, Dark blue, orange line
+        colors: ['#0c4a7e', '#94a3b8', '#f97316'], // Dark blue simulated column, Grey baseline line, Orange line
         fill: {
-            opacity: [0.35, 1, 1],
+            opacity: [1, 1, 1],
         },
         labels: ['2567', '2568', '2569'],
         markers: {
-            size: 5,
+            size: [0, 5, 5], // Show markers for line series
             strokeWidth: 2,
             hover: { size: 7 }
         },
@@ -541,7 +542,7 @@ function initTrendChart() {
                 max: 3.0
             },
             {
-                seriesName: 'งบประมาณจำลอง (ล้านบาท)',
+                seriesName: 'งบประมาณดั้งเดิม (ล้านบาท)',
                 show: false,
                 min: 0,
                 max: 3.0
