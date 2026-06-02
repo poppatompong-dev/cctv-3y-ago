@@ -669,7 +669,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .dist-item.active-filter {
     background-color: var(--insight-bg);
-    border-left: 3px solid var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 5px 7px; /* compensate border width to prevent layout shift */
 }
 
 .dist-header {
@@ -795,8 +796,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .scenario-table tbody tr.selected-scenario {
     background-color: #f0fdf4;
-    border-left: 3px solid var(--accent-green);
     color: #15803d;
+}
+
+.scenario-table tbody tr.selected-scenario td {
+    border-top: 1px solid var(--accent-green) !important;
+    border-bottom: 1px solid var(--accent-green) !important;
+}
+
+.scenario-table tbody tr.selected-scenario td:first-child {
+    border-left: 1px solid var(--accent-green) !important;
+}
+
+.scenario-table tbody tr.selected-scenario td:last-child {
+    border-right: 1px solid var(--accent-green) !important;
 }
 
 .scenario-table tbody tr.selected-scenario td:first-child {
@@ -1173,21 +1186,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .step-short {
-    border-left: 4px solid var(--accent-green);
+    border-color: var(--accent-green);
 }
 .step-short .guide-step-header {
     background-color: #14532d;
 }
 
 .step-mid {
-    border-left: 4px solid var(--accent-orange);
+    border-color: var(--accent-orange);
 }
 .step-mid .guide-step-header {
     background-color: #7c2d12;
 }
 
 .step-long {
-    border-left: 4px solid var(--accent-blue);
+    border-color: var(--accent-blue);
 }
 .step-long .guide-step-header {
     background-color: #0c4a6e;
@@ -1362,12 +1375,10 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--primary-light);
-    border-left: 4px solid var(--accent-blue);
-    padding-left: 8px;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .modal-split-grid {
@@ -1662,7 +1673,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cabling-card-highlight {
-    border-left: 5px solid var(--accent-red) !important;
+    border: 2px solid var(--accent-red) !important;
+    background-color: rgba(239, 68, 68, 0.03) !important;
 }
 
 /* Charts Grid for Cabling */
@@ -1872,7 +1884,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Executive Summary Box */
 .summary-quote-box {
     background: linear-gradient(135deg, #fef2f2 0%, #fffbeb 100%);
-    border-left: 5px solid var(--accent-red);
+    border: 1px solid rgba(239, 68, 68, 0.25);
     padding: 16px 20px;
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
@@ -2036,5 +2048,129 @@ h1, h2, h3, h4, h5, h6 {
 
     .grid-cabling-kpis {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   UX/UI critique enhancements - Sub-Tabs, Mobile Tables & Transitions
+   ========================================================================== */
+
+/* Cabling Chart Sub-Tabs */
+.cabling-chart-subtabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background-color: #e2e8f0;
+    padding: 4px;
+    border-radius: var(--radius-md);
+    width: fit-content;
+}
+
+.btn-sub-tab {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.btn-sub-tab:hover {
+    color: var(--primary);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-sub-tab.active {
+    background-color: #ffffff;
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Animations and transitions */
+.fade-in {
+    animation: fadeIn 0.25s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pulse-value {
+    animation: pulseValue 0.3s ease-in-out;
+}
+
+@keyframes pulseValue {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); color: var(--accent-blue); }
+    100% { transform: scale(1); }
+}
+
+/* Mobile Stacking for Table Data */
+@media (max-width: 768px) {
+    .data-table, 
+    .data-table thead, 
+    .data-table tbody, 
+    .data-table th, 
+    .data-table td, 
+    .data-table tr {
+        display: block;
+    }
+    
+    .data-table thead {
+        display: none !important;
+    }
+    
+    .data-table tr {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-normal);
+    }
+    
+    .data-table tr:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-light);
+    }
+    
+    .data-table td {
+        border-bottom: 1px solid var(--border-light) !important;
+        padding: 8px 0 !important;
+        text-align: left !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.82rem;
+    }
+    
+    .data-table td:last-child {
+        border-bottom: none !important;
+    }
+    
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--primary-light);
+        font-size: 0.76rem;
+        flex-shrink: 0;
+        text-align: left;
+    }
+    
+    .data-table td.font-outfit {
+        font-size: 0.88rem;
     }
 }

@@ -1169,6 +1169,8 @@ window.switchGuidelineTab = function(tabId) {
 // ==========================================
 // Cabling Cost Driver Dashboard Controller & Switcher
 // ==========================================
+// Cabling Cost Driver Dashboard Controller & Switcher
+// ==========================================
 window.switchDashboardTab = function(tabId) {
     const overallView = document.getElementById("overall-dashboard-view");
     const cablingView = document.getElementById("cabling-dashboard-view");
@@ -1177,7 +1179,11 @@ window.switchDashboardTab = function(tabId) {
     
     if (tabId === "cabling") {
         overallView.classList.add("hidden");
+        overallView.classList.remove("fade-in");
+        
         cablingView.classList.remove("hidden");
+        cablingView.classList.add("fade-in");
+        
         overallTabBtn.classList.remove("active");
         cablingTabBtn.classList.add("active");
         
@@ -1198,7 +1204,11 @@ window.switchDashboardTab = function(tabId) {
         }
     } else {
         overallView.classList.remove("hidden");
+        overallView.classList.add("fade-in");
+        
         cablingView.classList.add("hidden");
+        cablingView.classList.remove("fade-in");
+        
         overallTabBtn.classList.add("active");
         cablingTabBtn.classList.remove("active");
         
@@ -1209,6 +1219,30 @@ window.switchDashboardTab = function(tabId) {
     lucide.createIcons();
 };
 
+window.switchCablingChartTab = function(tabName) {
+    const budgetGroup = document.getElementById("cabling-charts-group-budget");
+    const riskGroup = document.getElementById("cabling-charts-group-risk");
+    const budgetBtn = document.getElementById("subtab-budget");
+    const riskBtn = document.getElementById("subtab-risk");
+    
+    if (tabName === 'budget') {
+        budgetGroup.classList.remove("hidden");
+        riskGroup.classList.add("hidden");
+        budgetBtn.classList.add("active");
+        riskBtn.classList.remove("active");
+    } else {
+        budgetGroup.classList.add("hidden");
+        riskGroup.classList.remove("hidden");
+        budgetBtn.classList.remove("active");
+        riskBtn.classList.add("active");
+    }
+    
+    // Trigger resize event so hidden ApexCharts render correctly when shown
+    setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, 50);
+};
+
 function renderCablingKPIs() {
     const reduction = state.filters.cablingScenario; // 0, 10, 20, 30
     const multiplier = (100 - reduction) / 100;
@@ -1216,8 +1250,11 @@ function renderCablingKPIs() {
     const totalBudget = 3477000;
     const simBudget = totalBudget * multiplier;
     
+    const budgetEl = document.getElementById("cab-kpi-budget");
+    const avgEl = document.getElementById("cab-kpi-avg");
+    
     // 1. Total Cabling Budget (Millions)
-    document.getElementById("cab-kpi-budget").textContent = (simBudget / 1000000).toFixed(3);
+    budgetEl.textContent = (simBudget / 1000000).toFixed(3);
     
     // 2. Savings indicator
     const savings = totalBudget - simBudget;
@@ -1232,7 +1269,15 @@ function renderCablingKPIs() {
     
     // 3. Average cost per camera
     const avgCost = Math.round(simBudget / 275);
-    document.getElementById("cab-kpi-avg").textContent = avgCost.toLocaleString();
+    avgEl.textContent = avgCost.toLocaleString();
+    
+    // Trigger CSS pulse values animation
+    budgetEl.classList.remove("pulse-value");
+    avgEl.classList.remove("pulse-value");
+    void budgetEl.offsetWidth; // Force element reflow
+    void avgEl.offsetWidth;
+    budgetEl.classList.add("pulse-value");
+    avgEl.classList.add("pulse-value");
 }
 
 function renderCablingTable() {
@@ -1286,16 +1331,16 @@ function renderCablingTable() {
         else urgencyBadge += " e-bid";
         
         tr.innerHTML = `
-            <td style="font-weight: 500; text-align:center;">${project.year}</td>
-            <td style="font-weight: 600; color: var(--primary); line-height: 1.3;">${project.name}</td>
-            <td style="color:var(--text-secondary); font-size:0.76rem; font-weight:500;">${project.location}</td>
-            <td class="font-outfit" style="text-align:right; font-weight:600;">${project.cameras}</td>
-            <td class="font-outfit" style="text-align:right; font-weight:700; color:var(--primary-light);">${simBudget.toLocaleString()}</td>
-            <td class="font-outfit" style="text-align:right; font-weight:600;">${avgCost.toLocaleString()}</td>
-            <td style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4;">${analysis.rootCause}</td>
-            <td style="font-size:0.75rem; color:#991b1b; font-weight:500; line-height:1.4;">${analysis.risk}</td>
-            <td style="font-size:0.75rem; color:#15803d; font-weight:500; line-height:1.4;">${analysis.proposal}</td>
-            <td style="text-align:center;"><span class="${urgencyBadge}" style="font-size:0.7rem; padding:2px 8px;">${analysis.urgency}</span></td>
+            <td data-label="ปีงบประมาณ" style="font-weight: 500; text-align:center;">${project.year}</td>
+            <td data-label="ชื่อโครงการ" style="font-weight: 600; color: var(--primary); line-height: 1.3;">${project.name}</td>
+            <td data-label="พื้นที่ดำเนินการ" style="color:var(--text-secondary); font-size:0.76rem; font-weight:500;">${project.location}</td>
+            <td data-label="จำนวนกล้อง" class="font-outfit" style="text-align:right; font-weight:600;">${project.cameras}</td>
+            <td data-label="งบซ่อมสายสัญญาณ" class="font-outfit" style="text-align:right; font-weight:700; color:var(--primary-light);">${simBudget.toLocaleString()}</td>
+            <td data-label="งบเฉลี่ยต่อกล้อง" class="font-outfit" style="text-align:right; font-weight:600;">${avgCost.toLocaleString()}</td>
+            <td data-label="สาเหตุหลักของปัญหา" style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4;">${analysis.rootCause}</td>
+            <td data-label="ความเสี่ยงหากละเลย" style="font-size:0.75rem; color:#991b1b; font-weight:500; line-height:1.4;">${analysis.risk}</td>
+            <td data-label="ข้อเสนอแนวทางแก้ไข" style="font-size:0.75rem; color:#15803d; font-weight:500; line-height:1.4;">${analysis.proposal}</td>
+            <td data-label="ระดับความเร่งด่วน" style="text-align:center;"><span class="${urgencyBadge}" style="font-size:0.7rem; padding:2px 8px;">${analysis.urgency}</span></td>
         `;
         tbody.appendChild(tr);
     });

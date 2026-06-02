@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แดชบอร์ดงบซ่อม CCTV | เทศบาลนครนครสวรรค์</title>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=1.0.2">
+    <link rel="stylesheet" href="styles.css?v=1.0.3">
     <!-- ApexCharts CDN -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <!-- Lucide Icons CDN -->
@@ -772,88 +772,105 @@
                 </div>
             </div>
 
-            <!-- Visual Charts Grid (6 charts) -->
-            <div class="cabling-charts-row">
-                <!-- Chart 1: Yearly Cabling Budget Comparison -->
-                <div class="dashboard-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="bar-chart-2"></i>
-                            <span>งบประมาณซ่อมสายสัญญาณ รายปี (เปรียบเทียบ)</span>
-                        </h2>
+            <!-- Visual Charts Groups & Sub-Tabs -->
+            <div class="cabling-chart-subtabs" id="cabling-chart-subtabs">
+                <button class="btn-sub-tab active" onclick="switchCablingChartTab('budget')" id="subtab-budget">
+                    <i data-lucide="bar-chart-2" style="display:inline-block; width:14px; height:14px; margin-right:4px; vertical-align:middle;"></i>
+                    <span>วิเคราะห์สถิติงบประมาณ</span>
+                </button>
+                <button class="btn-sub-tab" onclick="switchCablingChartTab('risk')" id="subtab-risk">
+                    <i data-lucide="shield-alert" style="display:inline-block; width:14px; height:14px; margin-right:4px; vertical-align:middle;"></i>
+                    <span>วิเคราะห์โครงข่ายและความเสี่ยง</span>
+                </button>
+            </div>
+
+            <!-- Group A: Budget Statistics (Visible by Default) -->
+            <div id="cabling-charts-group-budget" class="fade-in">
+                <div class="cabling-charts-row">
+                    <!-- Chart 1: Yearly Cabling Budget Comparison -->
+                    <div class="dashboard-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="bar-chart-2"></i>
+                                <span>งบประมาณซ่อมสายสัญญาณ รายปี (เปรียบเทียบ)</span>
+                            </h2>
+                        </div>
+                        <div id="cab-chart-yearly-bar" style="min-height: 220px;"></div>
                     </div>
-                    <div id="cab-chart-yearly-bar" style="min-height: 220px;"></div>
+
+                    <!-- Chart 2: Donut Budget share -->
+                    <div class="dashboard-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="pie-chart"></i>
+                                <span>สัดส่วนงบสายสัญญาณ เทียบกับหมวดอื่น</span>
+                            </h2>
+                        </div>
+                        <div id="cab-chart-donut-share" style="min-height: 220px;"></div>
+                    </div>
                 </div>
 
-                <!-- Chart 2: Donut Budget share -->
-                <div class="dashboard-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="pie-chart"></i>
-                            <span>สัดส่วนงบสายสัญญาณ เทียบกับหมวดอื่น</span>
-                        </h2>
+                <div class="cabling-charts-row" style="margin-top: 16px;">
+                    <!-- Chart 3: Line Chart (3-Year trend) -->
+                    <div class="dashboard-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="trending-up"></i>
+                                <span>แนวโน้มการเปลี่ยนแปลงค่าซ่อมสายสัญญาณ (3 ปี)</span>
+                            </h2>
+                        </div>
+                        <div id="cab-chart-trend-line" style="min-height: 220px;"></div>
                     </div>
-                    <div id="cab-chart-donut-share" style="min-height: 220px;"></div>
+
+                    <!-- Chart 4: Scatter Plot (Budget/Camera comparison) -->
+                    <div class="dashboard-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="compass"></i>
+                                <span>เปรียบเทียบงบประมาณซ่อมสายสัญญาณ ต่อจำนวนกล้อง</span>
+                            </h2>
+                        </div>
+                        <div id="cab-chart-scatter-plot" style="min-height: 220px;"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="cabling-charts-row">
-                <!-- Chart 3: Line Chart (3-Year trend) -->
-                <div class="dashboard-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="trending-up"></i>
-                            <span>แนวโน้มการเปลี่ยนแปลงค่าซ่อมสายสัญญาณ (3 ปี)</span>
-                        </h2>
-                    </div>
-                    <div id="cab-chart-trend-line" style="min-height: 220px;"></div>
-                </div>
-
-                <!-- Chart 4: Scatter Plot (Budget/Camera comparison) -->
-                <div class="dashboard-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="compass"></i>
-                            <span>เปรียบเทียบงบประมาณซ่อมสายสัญญาณ ต่อจำนวนกล้อง</span>
-                        </h2>
-                    </div>
-                    <div id="cab-chart-scatter-plot" style="min-height: 220px;"></div>
-                </div>
-            </div>
-
-            <div class="cabling-charts-row">
-                <!-- Chart 5: Heatmap of repeated network problems -->
-                <div class="dashboard-card heatmap-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="flame"></i>
-                            <span>จุดที่ปัญหาสายสัญญาณซ้ำซาก และคะแนนความเสี่ยงเชิงพื้นที่ (Heatmap)</span>
-                        </h2>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap:16px; align-items: center;">
-                        <div id="cab-chart-heatmap-risk" style="min-height: 220px;"></div>
-                        <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.5;">
-                            <strong>หมายเหตุการประเมินความเสี่ยงเชิงพื้นที่:</strong>
-                            <ul style="margin-left: 14px; margin-top: 6px; display:flex; flex-direction:column; gap:6px;">
-                                <li><strong style="color:var(--accent-red);">เสี่ยงสูงสุด (Critical):</strong> โหนดกล้องจราจรและแยกหลัก (เช่น สะพานเดชาติวงศ์) เนื่องจากไฟดับจากฟ้าผ่าบ่อย กระทบเครือข่ายเป็นทอด</li>
-                                <li><strong style="color:var(--accent-orange);">เสี่ยงสูง (High):</strong> พื้นที่จัดงานและสวนสาธารณะ (เช่น อุทยานสวรรค์, สนามกีฬา) มีความชื้นสูงและกิ่งไม้พาดทับสายสัญญาณบนเสาไฟบ่อย</li>
-                                <li><strong>เสี่ยงปานกลาง (Medium):</strong> แถบศูนย์บริการและอาคารสาธารณะ (เช่น สภ.เมืองนครสวรรค์) มักเจอปัญหาช่วงงานปรับปรุงทางเท้าหรือรื้อถอนแนวสายเดิม</li>
-                            </ul>
+            <!-- Group B: Network & Risk Analysis (Hidden by Default) -->
+            <div id="cabling-charts-group-risk" class="hidden fade-in">
+                <div class="cabling-charts-row">
+                    <!-- Chart 5: Heatmap of repeated network problems -->
+                    <div class="dashboard-card heatmap-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="flame"></i>
+                                <span>จุดที่ปัญหาสายสัญญาณซ้ำซาก และคะแนนความเสี่ยงเชิงพื้นที่ (Heatmap)</span>
+                            </h2>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap:16px; align-items: center;">
+                            <div id="cab-chart-heatmap-risk" style="min-height: 220px;"></div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.5;">
+                                <strong>หมายเหตุการประเมินความเสี่ยงเชิงพื้นที่:</strong>
+                                <ul style="margin-left: 14px; margin-top: 6px; display:flex; flex-direction:column; gap:6px;">
+                                    <li><strong style="color:var(--accent-red);">เสี่ยงสูงสุด (Critical):</strong> โหนดกล้องจราจรและแยกหลัก (เช่น สะพานเดชาติวงศ์) เนื่องจากไฟดับจากฟ้าผ่าบ่อย กระทบเครือข่ายเป็นทอด</li>
+                                    <li><strong style="color:var(--accent-orange);">เสี่ยงสูง (High):</strong> พื้นที่จัดงานและสวนสาธารณะ (เช่น อุทยานสวรรค์, สนามกีฬา) มีความชื้นสูงและกิ่งไม้พาดทับสายสัญญาณบนเสาไฟบ่อย</li>
+                                    <li><strong>เสี่ยงปานกลาง (Medium):</strong> แถบศูนย์บริการและอาคารสาธารณะ (เช่น สภ.เมืองนครสวรรค์) มักเจอปัญหาช่วงงานปรับปรุงทางเท้าหรือรื้อถอนแนวสายเดิม</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="cabling-charts-row">
-                <!-- Chart 6: Pareto Chart (Project Contribution analysis) -->
-                <div class="dashboard-card heatmap-card">
-                    <div class="card-title-bar">
-                        <h2 class="card-title">
-                            <i data-lucide="trending-down"></i>
-                            <span>Pareto Chart: ต้นเหตุหลักการใช้งบซ่อมสายสัญญาณ (รายโครงการ)</span>
-                        </h2>
+                <div class="cabling-charts-row" style="margin-top: 16px;">
+                    <!-- Chart 6: Pareto Chart (Project Contribution analysis) -->
+                    <div class="dashboard-card heatmap-card">
+                        <div class="card-title-bar">
+                            <h2 class="card-title">
+                                <i data-lucide="trending-down"></i>
+                                <span>Pareto Chart: ต้นเหตุหลักการใช้งบซ่อมสายสัญญาณ (รายโครงการ)</span>
+                            </h2>
+                        </div>
+                        <div id="cab-chart-pareto-analysis" style="min-height: 240px;"></div>
                     </div>
-                    <div id="cab-chart-pareto-analysis" style="min-height: 240px;"></div>
                 </div>
             </div>
 
@@ -1115,6 +1132,6 @@
     </div> <!-- End Modal Overlay -->
 
     <!-- Application Script -->
-    <script src="app.js?v=1.0.2"></script>
+    <script src="app.js?v=1.0.3"></script>
 </body>
 </html>
