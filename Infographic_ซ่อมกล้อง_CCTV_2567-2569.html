@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infographic สรุปซ่อมกล้อง CCTV เทศบาลนครนครสวรรค์ พ.ศ. 2567-2569</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', Tahoma, 'Noto Sans Thai', sans-serif; background: #f5f7fa; min-height:100vh; display:flex; justify-content:center; padding:24px 12px; }
+  .info-wrap { max-width: 780px; width:100%; }
+
+  .header { text-align: center; margin-bottom: 24px; padding: 28px 20px; background: linear-gradient(135deg, #1e3a5f, #2d5f8a); border-radius: 18px; color: #fff; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(30,58,95,0.3); }
+  .header::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; background: rgba(255,255,255,0.06); border-radius:50%; }
+  .header::after { content:''; position:absolute; bottom:-20px; left:-20px; width:100px; height:100px; background: rgba(255,255,255,0.04); border-radius:50%; }
+  .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .header .subtitle { font-size: 15px; opacity: 0.85; }
+  .header .org { font-size: 13px; opacity: 0.65; margin-top: 8px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+  .kpi { background: #fff; border: 1px solid #e5e8ee; border-radius: 14px; padding: 18px 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s; }
+  .kpi:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .kpi .icon { font-size: 28px; margin-bottom: 6px; }
+  .kpi .value { font-size: 26px; font-weight: 800; }
+  .kpi .label { font-size: 12px; color: #666; margin-top: 4px; }
+  .kpi:nth-child(1) .value { color: #2d5f8a; }
+  .kpi:nth-child(2) .value { color: #d97706; }
+  .kpi:nth-child(3) .value { color: #059669; }
+
+  .section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin: 22px 0 12px; padding-left: 12px; border-left: 4px solid #2d5f8a; }
+
+  .chart-area { background: #fff; border: 1px solid #e5e8ee; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+  .bar-chart { display: flex; align-items: flex-end; justify-content: center; gap: 40px; height: 200px; padding: 0 24px; }
+  .bar-group { display: flex; flex-direction: column; align-items: center; flex: 1; max-width: 180px; }
+  .bar-wrapper { display: flex; align-items: flex-end; gap: 8px; height: 160px; }
+  .bar { border-radius: 8px 8px 0 0; min-width: 44px; position: relative; transition: all 0.3s; cursor: pointer; }
+  .bar:hover { opacity: 0.85; transform: scaleY(1.02); transform-origin: bottom; }
+  .bar .bar-val { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .bar.budget { background: #2d5f8a; }
+  .bar.budget .bar-val { color: #1e3a5f; }
+  .bar.camera { background: #f59e0b; }
+  .bar.camera .bar-val { color: #92400e; }
+  .bar-label { font-size: 14px; font-weight: 600; margin-top: 10px; color: #1a1a1a; }
+
+  .legend { display: flex; gap: 20px; justify-content: center; margin-top: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  .trend-box { display: flex; align-items: center; gap: 10px; padding: 14px 18px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; margin-top: 16px; }
+  .trend-icon { font-size: 26px; }
+  .trend-text { font-size: 13px; color: #991b1b; line-height: 1.6; }
+  .trend-text strong { font-weight: 700; }
+
+  .click-hint { text-align: center; font-size: 12px; color: #999; margin-bottom: 8px; }
+
+  .year-section { margin-bottom: 14px; }
+  .year-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 12px; cursor: pointer; user-select: none; transition: all 0.2s; }
+  .year-header:hover { opacity: 0.9; }
+  .year-header.y67 { background: #e0ecf7; }
+  .year-header.y68 { background: #fef3c7; }
+  .year-header.y69 { background: #d1fae5; }
+  .year-header .yr { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+  .year-header .yr-stats { font-size: 12px; color: #555; text-align: right; }
+  .year-header .yr-stats strong { color: #1a1a1a; }
+
+  .projects { padding: 10px 0 0 16px; display: none; }
+  .projects.open { display: block; }
+  .project-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 13px; color: #444; }
+  .project-item:last-child { border-bottom: none; }
+  .p-num { font-weight: 700; color: #2d5f8a; min-width: 20px; }
+  .p-detail { flex: 1; line-height: 1.6; }
+  .p-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; margin-left: 4px; }
+  .badge-cam { background: #fef3c7; color: #92400e; }
+  .badge-budget { background: #dbeafe; color: #1e40af; }
+
+  .footer { text-align: center; margin-top: 24px; font-size: 11px; color: #aaa; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .year-header { break-inside: avoid; }
+    .projects { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="info-wrap">
+  <div class="header">
+    <h1>สรุปการซ่อมกล้อง CCTV ย้อนหลัง 3 ปี</h1>
+    <div class="subtitle">เทศบาลนครนครสวรรค์ พ.ศ. 2567 – 2569</div>
+    <div class="org">ข้อมูลจากรายงานการซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด</div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="icon">📋</div>
+      <div class="value">9</div>
+      <div class="label">โครงการทั้งหมด</div>
+    </div>
+    <div class="kpi">
+      <div class="icon">📷</div>
+      <div class="value">394+</div>
+      <div class="label">กล้องที่ซ่อม (ตัว)</div>
+    </div>
+    <div class="kpi">
+      <div class="icon">💰</div>
+      <div class="value">5.67 ล.</div>
+      <div class="label">งบประมาณรวม (บาท)</div>
+    </div>
+  </div>
+
+  <div class="section-title">เปรียบเทียบงบประมาณ และจำนวนกล้อง รายปี</div>
+  <div class="chart-area">
+    <div class="bar-chart">
+      <div class="bar-group">
+        <div class="bar-wrapper">
+          <div class="bar budget" style="height:106px;width:44px;"><span class="bar-val">1.90 ล.</span></div>
+          <div class="bar camera" style="height:58px;width:44px;"><span class="bar-val">119</span></div>
+        </div>
+        <div class="bar-label">พ.ศ. 2567</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-wrapper">
+          <div class="bar budget" style="height:70px;width:44px;"><span class="bar-val">1.26 ล.</span></div>
+          <div class="bar camera" style="height:24px;width:44px;"><span class="bar-val">45</span></div>
+        </div>
+        <div class="bar-label">พ.ศ. 2568</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-wrapper">
+          <div class="bar budget" style="height:140px;width:44px;"><span class="bar-val">2.51 ล.</span></div>
+          <div class="bar camera" style="height:120px;width:44px;"><span class="bar-val">230</span></div>
+        </div>
+        <div class="bar-label">พ.ศ. 2569</div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#2d5f8a"></div>งบประมาณ (ล้านบาท)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>จำนวนกล้อง (ตัว)</div>
+    </div>
+  </div>
+
+  <div class="trend-box">
+    <div class="trend-icon">📈</div>
+    <div class="trend-text">
+      <strong>แนวโน้ม:</strong> ปี 2569 มีการซ่อมกล้องมากที่สุด <strong>230 ตัว</strong> ด้วยงบ <strong>2.51 ล้านบาท</strong> โดยรวมเป็นโครงการเดียวขนาดใหญ่ผ่านวิธีคัดเลือก แทนการแบ่งซ่อมย่อยหลายรอบ
+    </div>
+  </div>
+
+  <div class="section-title">รายละเอียดโครงการแต่ละปี</div>
+  <div class="click-hint">คลิกที่แถบปีเพื่อดูรายละเอียด</div>
+
+  <div class="year-section">
+    <div class="year-header y67" onclick="toggle(this)">
+      <span class="yr">📅 พ.ศ. 2567</span>
+      <span class="yr-stats">5 โครงการ | <strong>119 กล้อง</strong> | <strong>1,900,000 ฿</strong></span>
+    </div>
+    <div class="projects">
+      <div class="project-item"><span class="p-num">1</span><span class="p-detail">เคลื่อนย้ายอุปกรณ์และเดินสายส่งสัญญาณ ที่ สภ.เมืองนครสวรรค์ <span class="p-badge badge-budget">163,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">2</span><span class="p-detail">ซ่อมระบบกล้อง CCTV ระยะที่ 3, 4, 5 <span class="p-badge badge-cam">32 กล้อง</span> <span class="p-badge badge-budget">454,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">3</span><span class="p-detail">ซ่อมระบบกล้อง CCTV ระยะที่ 2, 3, 4, 6, 8 <span class="p-badge badge-cam">11 กล้อง</span> <span class="p-badge badge-budget">320,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">4</span><span class="p-detail">ซ่อมระบบกล้อง CCTV ระยะที่ 2, 3, 4, 6, 7 + อุทยานสวรรค์ 1 & 2 <span class="p-badge badge-cam">38 กล้อง</span> <span class="p-badge badge-budget">488,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">5</span><span class="p-detail">ซ่อมระบบกล้อง CCTV ระยะที่ 1-7 + สถานีขนส่ง <span class="p-badge badge-cam">38 กล้อง</span> <span class="p-badge badge-budget">475,000 ฿</span></span></div>
+    </div>
+  </div>
+
+  <div class="year-section">
+    <div class="year-header y68" onclick="toggle(this)">
+      <span class="yr">📅 พ.ศ. 2568</span>
+      <span class="yr-stats">3 โครงการ | <strong>45 กล้อง + 870 เสา</strong> | <strong>1,259,000 ฿</strong></span>
+    </div>
+    <div class="projects">
+      <div class="project-item"><span class="p-num">1</span><span class="p-detail">ซ่อมสายสัญญาณ+ระบบไฟฟ้า ระยะที่ 1, 2, 3, 4, 6, 7 <span class="p-badge badge-cam">20 กล้อง</span> <span class="p-badge badge-budget">483,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">2</span><span class="p-detail">ติดแถบสีสายสัญญาณเครือข่ายเทศบาล <span class="p-badge badge-cam">870 เสา</span> <span class="p-badge badge-budget">295,000 ฿</span></span></div>
+      <div class="project-item"><span class="p-num">3</span><span class="p-detail">ซ่อมสายสัญญาณ+ระบบไฟฟ้า ระยะที่ 3-6, 8 + สนามกีฬากลาง, อุทยานสวรรค์ 1 & 2, ชุมชนชอนตะวัน, กล้องจราจร <span class="p-badge badge-cam">25 กล้อง</span> <span class="p-badge badge-budget">481,000 ฿</span></span></div>
+    </div>
+  </div>
+
+  <div class="year-section">
+    <div class="year-header y69" onclick="toggle(this)">
+      <span class="yr">📅 พ.ศ. 2569</span>
+      <span class="yr-stats">1 โครงการ | <strong>230 กล้อง</strong> | <strong>2,513,000 ฿</strong></span>
+    </div>
+    <div class="projects">
+      <div class="project-item"><span class="p-num">1</span><span class="p-detail">ซ่อมสายสัญญาณ+ระบบไฟฟ้ากล้อง CCTV ทั้งเขตเทศบาล (โดยวิธีคัดเลือก) <span class="p-badge badge-cam">230 กล้อง</span> <span class="p-badge badge-budget">2,513,000 ฿</span></span></div>
+    </div>
+  </div>
+
+  <div class="footer">จัดทำโดยระบบ AI สำหรับนำเสนอต่อผู้บังคับบัญชา | วันที่ 12 พฤษภาคม 2569</div>
+</div>
+<script>
+function toggle(el) {
+  const proj = el.nextElementSibling;
+  proj.classList.toggle('open');
+}
+document.querySelector('.projects').classList.add('open');
+</script>
+</body>
+</html>

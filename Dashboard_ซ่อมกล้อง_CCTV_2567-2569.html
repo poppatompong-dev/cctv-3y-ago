@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard งบซ่อม CCTV เทศบาลนครนครสวรรค์ พ.ศ. 2567-2569</title>
+<style>
+  :root {
+    --ink: #0f1f3a;
+    --navy: #143b73;
+    --navy-2: #1f5c99;
+    --sky: #e9f2fb;
+    --line: #d8e0ea;
+    --muted: #637083;
+    --paper: #f6f8fb;
+    --white: #ffffff;
+    --amber: #d98400;
+    --amber-soft: #fff4df;
+    --green: #16834b;
+    --green-soft: #e9f7ef;
+    --red: #b42318;
+    --shadow: 0 14px 36px rgba(15, 31, 58, 0.10);
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "Noto Sans Thai", Tahoma, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    overflow-x: hidden;
+  }
+
+  button, select, input {
+    font: inherit;
+  }
+
+  .app-shell {
+    min-height: 100vh;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 24px;
+    color: #fff;
+    background: linear-gradient(90deg, #09224a 0%, #123f78 62%, #0e2f5e 100%);
+    box-shadow: 0 5px 18px rgba(8, 24, 52, 0.22);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .mark {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .mark svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .title-wrap {
+    min-width: 0;
+  }
+
+  .title-wrap h1 {
+    margin: 0;
+    font-size: clamp(20px, 2.1vw, 30px);
+    line-height: 1.16;
+    font-weight: 800;
+  }
+
+  .title-wrap p {
+    margin: 4px 0 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 13px;
+  }
+
+  .date-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  .dashboard {
+    width: min(1540px, calc(100% - 28px));
+    margin: 14px auto 28px;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
+    gap: 10px;
+    align-items: end;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: 0 7px 22px rgba(15, 31, 58, 0.06);
+  }
+
+  .field label {
+    display: block;
+    margin: 0 0 5px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .field select {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 34px 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+    background: var(--navy);
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .reset-btn:hover { background: #0f2f5d; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1.2fr) minmax(360px, 0.9fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .panel {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: 0 8px 26px rgba(15, 31, 58, 0.07);
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 15px 16px 8px;
+  }
+
+  .panel-title {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.3;
+    font-weight: 800;
+    color: #113769;
+  }
+
+  .panel-note {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .summary-stack {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .kpi-card {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 12px;
+    align-items: center;
+    min-height: 74px;
+    padding: 10px;
+    border: 1px solid #dfe6ef;
+    border-radius: 7px;
+    background: #fff;
+  }
+
+  .kpi-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 7px;
+    color: #fff;
+    background: linear-gradient(160deg, #17467f, #2f6fb5);
+  }
+
+  .kpi-card.savings .kpi-icon {
+    background: linear-gradient(160deg, #16834b, #28a164);
+  }
+
+  .kpi-card.budget .kpi-icon {
+    background: linear-gradient(160deg, #d98400, #f5aa22);
+  }
+
+  .kpi-icon svg {
+    width: 29px;
+    height: 29px;
+  }
+
+  .kpi-label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .kpi-value {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    margin-top: 2px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 850;
+    color: var(--navy);
+  }
+
+  .kpi-unit {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .sub-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 12px;
+  }
+
+  .chart-wrap {
+    min-width: 0;
+    padding: 0 16px 16px;
+  }
+
+  .annual-chart {
+    position: relative;
+    height: 326px;
+    padding: 18px 24px 34px 48px;
+  }
+
+  .axis-label {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .bars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: end;
+    gap: 40px;
+    height: 230px;
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(to top, transparent 0, transparent 24%, rgba(216,224,234,.7) 25%, transparent 26%),
+      linear-gradient(to top, transparent 0, transparent 49%, rgba(216,224,234,.7) 50%, transparent 51%),
+      linear-gradient(to top, transparent 0, transparent 74%, rgba(216,224,234,.7) 75%, transparent 76%);
+  }
+
+  .year-col {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 100%;
+  }
+
+  .budget-bar {
+    width: min(78px, 54%);
+    border-radius: 7px 7px 0 0;
+    background: linear-gradient(180deg, #1c5593, #0d3166);
+    box-shadow: 8px 0 14px rgba(15, 31, 58, 0.08);
+  }
+
+  .bar-val {
+    position: absolute;
+    bottom: calc(var(--h) + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .camera-dot {
+    position: absolute;
+    left: 50%;
+    bottom: var(--dot);
+    width: 16px;
+    height: 16px;
+    transform: translate(-50%, 8px);
+    border-radius: 50%;
+    background: var(--amber);
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(217, 132, 0, 0.4);
+  }
+
+  .camera-val {
+    position: absolute;
+    left: calc(50% + 18px);
+    bottom: var(--dot);
+    transform: translateY(8px);
+    color: #8a5200;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .year-label {
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 34px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .legend i {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background: var(--navy);
+  }
+
+  .legend i.line { border-radius: 50%; background: var(--amber); }
+
+  .insight-box {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #c9dced;
+    border-radius: 7px;
+    background: #f7fbff;
+  }
+
+  .insight-box strong {
+    color: #113769;
+  }
+
+  .insight-box p {
+    margin: 0;
+    color: #23324c;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .ranked {
+    padding: 0 16px 16px;
+  }
+
+  .rank-row {
+    display: grid;
+    grid-template-columns: minmax(138px, 1fr) minmax(120px, 1.35fr) 86px;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #edf1f6;
+  }
+
+  .rank-row:last-child { border-bottom: none; }
+
+  .rank-name {
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.32;
+  }
+
+  .rank-meta {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .track {
+    height: 28px;
+    border-radius: 5px;
+    background: #edf2f7;
+    overflow: hidden;
+  }
+
+  .fill {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 24px;
+    height: 100%;
+    padding-right: 7px;
+    color: #fff;
+    background: linear-gradient(90deg, #1e5b96, #0e3267);
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .rank-money {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .scenario-panel {
+    background: linear-gradient(180deg, #f7fff9, #eff9f2);
+    border-color: #b7dbc4;
+  }
+
+  .scenario-content {
+    padding: 0 16px 16px;
+  }
+
+  .scenario-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 11px;
+  }
+
+  .scenario-stat {
+    padding: 10px;
+    border: 1px solid #bdddc6;
+    border-radius: 7px;
+    background: #fff;
+  }
+
+  .scenario-stat .num {
+    color: var(--green);
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 850;
+  }
+
+  .scenario-stat .label {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .scenario-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 7px;
+    background: #fff;
+    font-size: 12px;
+  }
+
+  .scenario-table th,
+  .scenario-table td {
+    padding: 9px 8px;
+    border: 1px solid #cee3d4;
+    text-align: right;
+  }
+
+  .scenario-table th:first-child,
+  .scenario-table td:first-child {
+    text-align: left;
+  }
+
+  .scenario-table th {
+    color: #10512c;
+    background: #e4f4e9;
+    font-size: 11px;
+  }
+
+  .scenario-table tr.active td {
+    background: #dcf7e5;
+    font-weight: 800;
+  }
+
+  .assumption {
+    margin: 10px 0 0;
+    color: #2c5c40;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .detail-panel {
+    margin-top: 12px;
+  }
+
+  .detail-body {
+    padding: 0 16px 16px;
+  }
+
+  .detail-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #edf4fb;
+    color: #113769;
+    font-size: 11px;
+    font-weight: 750;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .mini {
+    padding: 9px;
+    border: 1px solid #dfe6ef;
+    border-radius: 7px;
+    background: #fff;
+  }
+
+  .mini b {
+    display: block;
+    font-size: 17px;
+    color: var(--navy);
+  }
+
+  .mini span {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .table-panel {
+    grid-column: 1 / span 2;
+  }
+
+  .roadmap-panel {
+    grid-column: 3;
+  }
+
+  .table-wrap {
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
+    max-height: 318px;
+    overflow: auto;
+    margin: 0 12px 12px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+  }
+
+  table.report-table {
+    width: 100%;
+    min-width: 860px;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #edf1f6;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .report-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: #fff;
+    background: #123f78;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .report-table td.num {
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 750;
+  }
+
+  .report-table tbody tr {
+    cursor: pointer;
+  }
+
+  .report-table tbody tr:hover,
+  .report-table tbody tr.selected {
+    background: #f1f7fd;
+  }
+
+  .category-pill {
+    display: inline-block;
+    max-width: 220px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: #edf4fb;
+    color: #113769;
+    font-size: 11px;
+    font-weight: 750;
+    white-space: normal;
+  }
+
+  .roadmap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 16px 16px;
+  }
+
+  .horizon {
+    border: 1px solid #dde7ef;
+    border-radius: 7px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .horizon h3 {
+    margin: 0;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .horizon.short h3 { background: var(--green); }
+  .horizon.mid h3 { background: var(--amber); }
+  .horizon.long h3 { background: var(--navy); }
+
+  .horizon ul {
+    margin: 0;
+    padding: 10px 12px 12px 27px;
+    font-size: 12px;
+    line-height: 1.72;
+  }
+
+  .footer-note {
+    margin: 12px 2px 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .empty {
+    padding: 24px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 1180px) {
+    .toolbar {
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .table-panel,
+    .roadmap-panel {
+      grid-column: auto;
+    }
+    .sub-grid {
+      grid-template-columns: 1fr;
+    }
+    .summary-stack {
+      grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .topbar {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 14px;
+    }
+    .dashboard {
+      width: min(100% - 16px, 1540px);
+      margin-top: 8px;
+    }
+    .toolbar {
+      grid-template-columns: 1fr;
+    }
+    .summary-stack,
+    .scenario-summary,
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+    .annual-chart {
+      height: 290px;
+      padding-left: 30px;
+    }
+    .bars {
+      gap: 12px;
+    }
+    .rank-row {
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+    .rank-money {
+      text-align: left;
+    }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .dashboard { width: 100%; margin: 0; }
+    .panel, .toolbar { box-shadow: none; }
+    .grid { grid-template-columns: 1fr; }
+    .table-panel, .roadmap-panel { grid-column: auto; }
+    .table-wrap { max-height: none; overflow: visible; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 4h14v8.8c0 4.2-2.7 6.9-7 8.2-4.3-1.3-7-4-7-8.2V4Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M8 12.4h8M8 8.3h8M8 16.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="title-wrap">
+        <h1>แดชบอร์ดงบซ่อม CCTV เทศบาลนครนครสวรรค์</h1>
+        <p>ข้อมูลจากรายงานซ่อมกล้อง พ.ศ. 2567-2569 สำหรับวางแผนงบประมาณและปรับปรุงระบบ</p>
+      </div>
+    </div>
+    <div class="date-chip">
+      <span>ข้อมูล ณ รายงานวันที่ 12 พ.ค. 2569</span>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="toolbar" aria-label="ตัวกรองรายงาน">
+      <div class="field">
+        <label for="yearFilter">ช่วงปี</label>
+        <select id="yearFilter">
+          <option value="all">2567-2569</option>
+          <option value="2567">พ.ศ. 2567</option>
+          <option value="2568">พ.ศ. 2568</option>
+          <option value="2569">พ.ศ. 2569</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="categoryFilter">ประเภทรายการซ่อม</label>
+        <select id="categoryFilter">
+          <option value="all">ทั้งหมด</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="methodFilter">วิธีจัดซื้อจัดจ้าง</label>
+        <select id="methodFilter">
+          <option value="all">ทั้งหมด</option>
+          <option value="เฉพาะเจาะจง">เฉพาะเจาะจง</option>
+          <option value="คัดเลือก">คัดเลือก</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="scenarioSelect">Scenario ลดงบซ่อม</label>
+        <select id="scenarioSelect">
+          <option value="0">ฐานข้อมูลเดิม</option>
+          <option value="20">ลด 20%</option>
+          <option value="35" selected>ลด 35%</option>
+          <option value="50">ลด 50%</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="viewMode">มุมมองตาราง</label>
+        <select id="viewMode">
+          <option value="project">รายโครงการ</option>
+          <option value="category">สรุปตามประเภท</option>
+        </select>
+      </div>
+      <button class="reset-btn" id="resetBtn" type="button">
+        รีเซ็ตตัวกรอง
+      </button>
+    </section>
+
+    <section class="grid">
+      <aside class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">ภาพรวมที่เลือก</h2>
+            <p class="panel-note" id="filterCaption">รวมข้อมูล 3 ปี</p>
+          </div>
+        </div>
+        <div class="summary-stack" id="kpiStack"></div>
+      </aside>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">แนวโน้มงบประมาณและจำนวนกล้องรายปี</h2>
+            <p class="panel-note">คลิกตัวกรองด้านบนเพื่อดูเฉพาะปีหรือประเภทงานที่สนใจ</p>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <div class="annual-chart">
+            <div class="axis-label">ล้านบาท</div>
+            <div class="bars" id="annualBars"></div>
+            <div class="legend">
+              <span><i></i>งบประมาณ</span>
+              <span><i class="line"></i>จำนวนกล้อง</span>
+            </div>
+          </div>
+          <div class="insight-box">
+            <div class="kpi-icon" style="width:40px;height:40px;border-radius:7px;">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 19V9M12 19V5M19 19v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p id="trendInsight"><strong>ข้อสังเกต:</strong> ปี 2569 เป็นโครงการเดียวขนาดใหญ่ ครอบคลุม 230 กล้อง ด้วยงบ 2.513 ล้านบาท</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">งบประมาณตามประเภทรายการซ่อม</h2>
+            <p class="panel-note">แจกแจงจากคำในรายงาน ไม่ใช่อาการเสียรายกล้อง</p>
+          </div>
+        </div>
+        <div class="ranked" id="categoryBars"></div>
+      </section>
+
+      <section class="panel scenario-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Scenario ลดงบซ่อม</h2>
+            <p class="panel-note">ปรับจากตัวเลือกด้านบนเพื่อคุยผลประหยัดเชิงแผน</p>
+          </div>
+        </div>
+        <div class="scenario-content">
+          <div class="scenario-summary">
+            <div class="scenario-stat">
+              <div class="num" id="baseAnnual">1.891</div>
+              <div class="label">ฐานเฉลี่ยงบซ่อม/ปี<br>ล้านบาท</div>
+            </div>
+            <div class="scenario-stat">
+              <div class="num" id="savingAnnual">0.662</div>
+              <div class="label">ประหยัดได้/ปี<br>ล้านบาท</div>
+            </div>
+            <div class="scenario-stat">
+              <div class="num" id="savingThreeYears">1.986</div>
+              <div class="label">ประหยัดได้/3 ปี<br>ล้านบาท</div>
+            </div>
+          </div>
+          <table class="scenario-table" aria-label="ตารางสมมติฐานลดงบซ่อม">
+            <thead>
+              <tr>
+                <th>สมมติฐาน</th>
+                <th>งบซ่อม/ปี</th>
+                <th>ประหยัด/ปี</th>
+                <th>ประหยัด/3 ปี</th>
+              </tr>
+            </thead>
+            <tbody id="scenarioRows"></tbody>
+          </table>
+          <p class="assumption">หมายเหตุ: เป็นสมมติฐานเพื่อวางแผนงบประมาณ ไม่ใช่ผลรับประกัน และยังไม่รวมต้นทุนโครงการปรับปรุงระบบ</p>
+        </div>
+      </section>
+
+      <section class="panel detail-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">รายละเอียดรายการที่เลือก</h2>
+            <p class="panel-note">คลิกแถวในตารางเพื่อดูงบ ประเภทงาน และพื้นที่</p>
+          </div>
+        </div>
+        <div class="detail-body" id="detailBody"></div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">รายละเอียดโครงการซ่อม</h2>
+            <p class="panel-note">ใช้ตรวจสอบรายการจริงจากรายงาน และดูความเชื่อมโยงกับประเภทงานซ่อม</p>
+          </div>
+        </div>
+        <div class="table-wrap" id="tableWrap"></div>
+      </section>
+
+      <section class="panel roadmap-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">แนวทางจัดทำงบประมาณ 3 ระยะ</h2>
+            <p class="panel-note">ย้ายจากซ่อมรายครั้ง ไปสู่ระบบดูแลเชิงป้องกัน</p>
+          </div>
+        </div>
+        <div class="roadmap">
+          <article class="horizon short">
+            <h3>ระยะสั้น (0-1 ปี)</h3>
+            <ul>
+              <li>สำรวจจุดเสี่ยงและจุดซ่อมบ่อย</li>
+              <li>บำรุงรักษาเชิงป้องกัน</li>
+              <li>จัดลำดับจุดสำคัญต่อประชาชน</li>
+              <li>แก้ไขจุดกระทบการใช้งานหลัก</li>
+            </ul>
+          </article>
+          <article class="horizon mid">
+            <h3>ระยะกลาง (1-3 ปี)</h3>
+            <ul>
+              <li>ปรับปรุงสายสัญญาณและระบบไฟฟ้า</li>
+              <li>รวมงานซ่อมเป็นสัญญาดูแล</li>
+              <li>กำหนด SLA และ KPI</li>
+              <li>วางงบตามความเสี่ยงของพื้นที่</li>
+            </ul>
+          </article>
+          <article class="horizon long">
+            <h3>ระยะยาว (3 ปีขึ้นไป)</h3>
+            <ul>
+              <li>วางแผนทดแทนอุปกรณ์ตามอายุใช้งาน</li>
+              <li>กำหนดมาตรฐานอุปกรณ์</li>
+              <li>สร้างศูนย์ข้อมูลหรือ monitoring</li>
+              <li>ลดซ่อมฉุกเฉิน เพิ่มความมั่นคงระบบ</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <p class="footer-note">
+      แหล่งข้อมูล: รายงานซ่อมกล้อง CCTV พ.ศ. 2567-2569 และอินโฟกราฟิกเดิมในโฟลเดอร์งาน. คำว่า “งานสายสัญญาณ/โครงข่าย” ใช้เพื่อสื่อสารเชิงบริหารจากรายการในรายงานที่ระบุ “สายสัญญาณและระบบไฟฟ้า”; รายงานไม่ได้แจกแจงอาการเสียรายกล้องหรือระบุไฟเบอร์เป็นรายการแยก.
+    </p>
+  </main>
+</div>
+
+<script>
+const projects = [
+  {
+    id: 1,
+    year: 2567,
+    order: 1,
+    title: "เคลื่อนย้ายอุปกรณ์และเดินสายส่งสัญญาณ ที่สถานีตำรวจภูธรเมืองนครสวรรค์",
+    category: "ย้าย/เดินสายส่งสัญญาณ",
+    categoryShort: "ย้าย/เดินสาย",
+    cameras: 0,
+    poles: 0,
+    budget: 163000,
+    method: "เฉพาะเจาะจง",
+    areas: "สภ.เมืองนครสวรรค์",
+    note: "ไม่มีจำนวนกล้องในรายงาน"
+  },
+  {
+    id: 2,
+    year: 2567,
+    order: 2,
+    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 3, 4 และ 5",
+    category: "ซ่อมระบบกล้อง",
+    categoryShort: "ซ่อมระบบกล้อง",
+    cameras: 32,
+    poles: 0,
+    budget: 454000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 3, 4, 5",
+    note: "ซ่อมระบบกล้องตามรายงาน"
+  },
+  {
+    id: 3,
+    year: 2567,
+    order: 3,
+    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 2, 3, 4, 6 และ 8",
+    category: "ซ่อมระบบกล้อง",
+    categoryShort: "ซ่อมระบบกล้อง",
+    cameras: 11,
+    poles: 0,
+    budget: 320000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 2, 3, 4, 6, 8",
+    note: "ซ่อมระบบกล้องตามรายงาน"
+  },
+  {
+    id: 4,
+    year: 2567,
+    order: 4,
+    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 2, 3, 4, 6, 7, อุทยานสวรรค์ 1 และ 2",
+    category: "ซ่อมระบบกล้อง",
+    categoryShort: "ซ่อมระบบกล้อง",
+    cameras: 38,
+    poles: 0,
+    budget: 488000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 2, 3, 4, 6, 7, อุทยานสวรรค์ 1 และ 2",
+    note: "ซ่อมระบบกล้องตามรายงาน"
+  },
+  {
+    id: 5,
+    year: 2567,
+    order: 5,
+    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 1-7 และสถานีขนส่ง",
+    category: "ซ่อมระบบกล้อง",
+    categoryShort: "ซ่อมระบบกล้อง",
+    cameras: 38,
+    poles: 0,
+    budget: 475000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 1-7, สถานีขนส่ง",
+    note: "ซ่อมระบบกล้องตามรายงาน"
+  },
+  {
+    id: 6,
+    year: 2568,
+    order: 1,
+    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิด ระยะที่ 1, 2, 3, 4, 6 และ 7",
+    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
+    categoryShort: "สายสัญญาณ/ไฟฟ้า",
+    cameras: 20,
+    poles: 0,
+    budget: 483000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 1, 2, 3, 4, 6, 7",
+    note: "ในรายงานใช้คำว่า สายสัญญาณและระบบไฟฟ้า"
+  },
+  {
+    id: 7,
+    year: 2568,
+    order: 2,
+    title: "จ้างติดแถบสีสายสัญญาณเครือข่ายเทศบาลนครนครสวรรค์",
+    category: "ติดแถบสีสายสัญญาณ",
+    categoryShort: "ติดแถบสี",
+    cameras: 0,
+    poles: 870,
+    budget: 295000,
+    method: "เฉพาะเจาะจง",
+    areas: "เครือข่ายเทศบาล 870 เสา",
+    note: "เป็นจำนวนเสา ไม่ใช่จำนวนกล้อง"
+  },
+  {
+    id: 8,
+    year: 2568,
+    order: 3,
+    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิด ระยะที่ 3, 4, 5, 6, 8 และพื้นที่สำคัญ",
+    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
+    categoryShort: "สายสัญญาณ/ไฟฟ้า",
+    cameras: 25,
+    poles: 0,
+    budget: 481000,
+    method: "เฉพาะเจาะจง",
+    areas: "ระยะที่ 3, 4, 5, 6, 8, สนามกีฬากลาง, อุทยานสวรรค์ 1 และ 2, ชุมชนชอนตะวัน, กล้องจราจร",
+    note: "ในรายงานใช้คำว่า สายสัญญาณและระบบไฟฟ้า"
+  },
+  {
+    id: 9,
+    year: 2569,
+    order: 1,
+    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิดภายในเขตเทศบาลนครนครสวรรค์",
+    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
+    categoryShort: "สายสัญญาณ/ไฟฟ้า",
+    cameras: 230,
+    poles: 0,
+    budget: 2513000,
+    method: "คัดเลือก",
+    areas: "ภายในเขตเทศบาลนครนครสวรรค์",
+    note: "โครงการเดียวขนาดใหญ่ โดยวิธีคัดเลือก"
+  }
+];
+
+const categoryDescriptions = {
+  "ซ่อมระบบกล้อง": "งานที่รายงานระบุว่าเป็นการซ่อมแซมระบบกล้อง CCTV โดยตรง",
+  "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า": "งานซ่อมสายสัญญาณ/โครงข่าย เช่น ไฟเบอร์ในเชิงสื่อสารบริหาร และระบบไฟฟ้าตามคำในรายงาน",
+  "ย้าย/เดินสายส่งสัญญาณ": "งานเคลื่อนย้ายอุปกรณ์และเดินสายส่งสัญญาณ",
+  "ติดแถบสีสายสัญญาณ": "งานระบุแนว/จัดระเบียบสายสัญญาณตามเสา"
+};
+
+const iconMap = {
+  projects: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10M7 4v16h10V4M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  camera: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 9h3l2-2h6l2 2h3v10H4V9Z" stroke="currentColor" stroke-width="1.8"/><path d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"/></svg>',
+  pole: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 8h12M8 12h8M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  budget: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 6c4 0 7 1.2 7 2.8S16 11.6 12 11.6 5 10.4 5 8.8 8 6 12 6Z" stroke="currentColor" stroke-width="1.8"/><path d="M5 9v6c0 1.6 3 2.8 7 2.8s7-1.2 7-2.8V9M5 12c0 1.6 3 2.8 7 2.8s7-1.2 7-2.8" stroke="currentColor" stroke-width="1.8"/></svg>',
+  savings: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l4-4 3 3 7-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+const filters = {
+  year: document.getElementById("yearFilter"),
+  category: document.getElementById("categoryFilter"),
+  method: document.getElementById("methodFilter"),
+  scenario: document.getElementById("scenarioSelect"),
+  viewMode: document.getElementById("viewMode")
+};
+
+let selectedProjectId = 9;
+
+const formatMoney = value => value.toLocaleString("th-TH");
+const formatMillion = value => (value / 1000000).toLocaleString("th-TH", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+const formatShortMillion = value => (value / 1000000).toLocaleString("th-TH", { minimumFractionDigits: value >= 1000000 ? 2 : 3, maximumFractionDigits: 3 });
+
+function uniqueCategories() {
+  return [...new Set(projects.map(p => p.category))];
+}
+
+function setupOptions() {
+  uniqueCategories().forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    filters.category.appendChild(option);
+  });
+}
+
+function currentData() {
+  return projects.filter(project => {
+    const yearOk = filters.year.value === "all" || String(project.year) === filters.year.value;
+    const categoryOk = filters.category.value === "all" || project.category === filters.category.value;
+    const methodOk = filters.method.value === "all" || project.method === filters.method.value;
+    return yearOk && categoryOk && methodOk;
+  });
+}
+
+function aggregate(list) {
+  return list.reduce((acc, p) => {
+    acc.projects += 1;
+    acc.cameras += p.cameras;
+    acc.poles += p.poles;
+    acc.budget += p.budget;
+    return acc;
+  }, { projects: 0, cameras: 0, poles: 0, budget: 0 });
+}
+
+function aggregateBy(list, key) {
+  const map = new Map();
+  list.forEach(item => {
+    const name = item[key];
+    if (!map.has(name)) {
+      map.set(name, { name, projects: 0, cameras: 0, poles: 0, budget: 0, rows: [] });
+    }
+    const entry = map.get(name);
+    entry.projects += 1;
+    entry.cameras += item.cameras;
+    entry.poles += item.poles;
+    entry.budget += item.budget;
+    entry.rows.push(item);
+  });
+  return [...map.values()].sort((a, b) => b.budget - a.budget);
+}
+
+function renderKpis(list) {
+  const total = aggregate(list);
+  const baseAnnual = 5672000 / 3;
+  const scenario = Number(filters.scenario.value);
+  const annualSaving = baseAnnual * scenario / 100;
+  const kpis = [
+    { label: "โครงการที่แสดง", value: total.projects, unit: "โครงการ", icon: "projects" },
+    { label: "กล้องที่เกี่ยวข้อง", value: total.cameras, unit: "กล้อง", icon: "camera" },
+    { label: "เสาที่เกี่ยวข้อง", value: total.poles, unit: "เสา", icon: "pole" },
+    { label: "งบประมาณ", value: formatShortMillion(total.budget), unit: "ล้านบาท", icon: "budget", cls: "budget" },
+    { label: `ประหยัดได้/ปี เมื่อ${scenario ? "ลด " + scenario + "%" : "ยังไม่ลด"}`, value: formatMillion(annualSaving), unit: "ล้านบาท", icon: "savings", cls: "savings" }
+  ];
+
+  document.getElementById("kpiStack").innerHTML = kpis.map(kpi => `
+    <article class="kpi-card ${kpi.cls || ""}">
+      <div class="kpi-icon">${iconMap[kpi.icon]}</div>
+      <div>
+        <div class="kpi-label">${kpi.label}</div>
+        <div class="kpi-value"><span>${kpi.value}</span><span class="kpi-unit">${kpi.unit}</span></div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderFilterCaption() {
+  const parts = [];
+  parts.push(filters.year.value === "all" ? "รวมข้อมูล 3 ปี" : `เฉพาะ พ.ศ. ${filters.year.value}`);
+  if (filters.category.value !== "all") parts.push(filters.category.value);
+  if (filters.method.value !== "all") parts.push(`วิธี${filters.method.value}`);
+  document.getElementById("filterCaption").textContent = parts.join(" | ");
+}
+
+function renderAnnualChart(list) {
+  const byYear = [2567, 2568, 2569].map(year => {
+    const rows = list.filter(p => p.year === year);
+    return { year, ...aggregate(rows) };
+  });
+  const maxBudget = Math.max(2513000, ...byYear.map(y => y.budget), 1);
+  const maxCamera = Math.max(230, ...byYear.map(y => y.cameras), 1);
+  document.getElementById("annualBars").innerHTML = byYear.map(item => {
+    const h = Math.max(0, Math.round(item.budget / maxBudget * 210));
+    const dot = Math.max(18, Math.round(item.cameras / maxCamera * 204));
+    return `
+      <div class="year-col">
+        <div class="budget-bar" style="height:${h}px;--h:${h}px"></div>
+        <div class="bar-val" style="--h:${h}px">${item.budget ? formatShortMillion(item.budget) : "-"}</div>
+        <div class="camera-dot" style="--dot:${dot}px"></div>
+        <div class="camera-val" style="--dot:${dot}px">${item.cameras || "-"}</div>
+        <div class="year-label">${item.year}</div>
+      </div>
+    `;
+  }).join("");
+
+  const all = aggregate(list);
+  const cpCamera = all.cameras ? Math.round(all.budget / all.cameras) : null;
+  const insight = cpCamera
+    ? `<strong>ข้อสังเกต:</strong> ชุดข้อมูลที่เลือกใช้งบ ${formatMoney(all.budget)} บาท ครอบคลุม ${all.cameras} กล้อง เฉลี่ยประมาณ ${formatMoney(cpCamera)} บาท/กล้อง`
+    : `<strong>ข้อสังเกต:</strong> ชุดข้อมูลที่เลือกไม่มีจำนวนกล้องโดยตรง จึงควรอ่านเป็นงานโครงข่าย/งานสนับสนุน ไม่ใช่ต้นทุนต่อกล้อง`;
+  document.getElementById("trendInsight").innerHTML = insight;
+}
+
+function renderCategoryBars(list) {
+  const rows = aggregateBy(list, "category");
+  const max = Math.max(...rows.map(r => r.budget), 1);
+  const total = aggregate(list).budget || 1;
+
+  if (!rows.length) {
+    document.getElementById("categoryBars").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
+    return;
+  }
+
+  document.getElementById("categoryBars").innerHTML = rows.map(row => {
+    const pctWidth = Math.max(5, row.budget / max * 100);
+    const share = row.budget / total * 100;
+    const meta = [
+      row.cameras ? `${row.cameras} กล้อง` : null,
+      row.poles ? `${row.poles} เสา` : null,
+      `${row.projects} รายการ`
+    ].filter(Boolean).join(" | ");
+    return `
+      <div class="rank-row" title="${categoryDescriptions[row.name] || row.name}">
+        <div>
+          <div class="rank-name">${row.name}</div>
+          <div class="rank-meta">${meta}</div>
+        </div>
+        <div class="track"><div class="fill" style="width:${pctWidth}%">${share.toFixed(1)}%</div></div>
+        <div class="rank-money">${formatMoney(row.budget)} บาท</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderScenario() {
+  const baseAnnual = 5672000 / 3;
+  const selected = Number(filters.scenario.value);
+  const scenarios = [0, 20, 35, 50];
+  document.getElementById("baseAnnual").textContent = formatMillion(baseAnnual);
+  document.getElementById("savingAnnual").textContent = formatMillion(baseAnnual * selected / 100);
+  document.getElementById("savingThreeYears").textContent = formatMillion(baseAnnual * selected / 100 * 3);
+
+  document.getElementById("scenarioRows").innerHTML = scenarios.map(pct => {
+    const after = baseAnnual * (1 - pct / 100);
+    const annual = baseAnnual * pct / 100;
+    const threeYears = annual * 3;
+    return `
+      <tr class="${pct === selected ? "active" : ""}">
+        <td>${pct ? "ลด " + pct + "%" : "ฐานข้อมูลเดิม"}</td>
+        <td>${formatMillion(after)}</td>
+        <td>${pct ? formatMillion(annual) : "-"}</td>
+        <td>${pct ? formatMillion(threeYears) : "-"}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderDetail(list) {
+  const selected = projects.find(p => p.id === selectedProjectId) || list[0] || projects[0];
+  if (!selected) {
+    document.getElementById("detailBody").innerHTML = '<div class="empty">ไม่มีข้อมูล</div>';
+    return;
+  }
+  document.getElementById("detailBody").innerHTML = `
+    <h3 class="detail-title">${selected.title}</h3>
+    <div class="detail-tags">
+      <span class="tag">พ.ศ. ${selected.year}</span>
+      <span class="tag">${selected.category}</span>
+      <span class="tag">วิธี${selected.method}</span>
+    </div>
+    <div class="detail-grid">
+      <div class="mini"><b>${formatMoney(selected.budget)}</b><span>บาท</span></div>
+      <div class="mini"><b>${selected.cameras || "-"}</b><span>กล้อง</span></div>
+      <div class="mini"><b>${selected.poles || "-"}</b><span>เสา</span></div>
+    </div>
+    <p class="panel-note" style="margin-top:10px"><strong>พื้นที่/ระยะ:</strong> ${selected.areas}</p>
+    <p class="panel-note"><strong>หมายเหตุ:</strong> ${selected.note}</p>
+  `;
+}
+
+function renderProjectTable(list) {
+  if (!list.length) {
+    document.getElementById("tableWrap").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
+    return;
+  }
+  document.getElementById("tableWrap").innerHTML = `
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>ปี</th>
+          <th>ลำดับ</th>
+          <th>ชื่อโครงการ/รายการซ่อม</th>
+          <th>ประเภทงานหลัก</th>
+          <th>กล้อง</th>
+          <th>เสา</th>
+          <th>งบประมาณ</th>
+          <th>วิธี</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map(p => `
+          <tr data-id="${p.id}" class="${p.id === selectedProjectId ? "selected" : ""}">
+            <td>${p.year}</td>
+            <td>${p.order}</td>
+            <td>${p.title}</td>
+            <td><span class="category-pill">${p.categoryShort}</span></td>
+            <td class="num">${p.cameras || "-"}</td>
+            <td class="num">${p.poles || "-"}</td>
+            <td class="num">${formatMoney(p.budget)}</td>
+            <td>${p.method}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+  document.querySelectorAll(".report-table tbody tr").forEach(row => {
+    row.addEventListener("click", () => {
+      selectedProjectId = Number(row.dataset.id);
+      renderAll();
+    });
+  });
+}
+
+function renderCategoryTable(list) {
+  const rows = aggregateBy(list, "category");
+  if (!rows.length) {
+    document.getElementById("tableWrap").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
+    return;
+  }
+  document.getElementById("tableWrap").innerHTML = `
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>ประเภทงาน</th>
+          <th>ความหมายใน dashboard</th>
+          <th>จำนวนรายการ</th>
+          <th>กล้อง</th>
+          <th>เสา</th>
+          <th>งบประมาณ</th>
+          <th>สัดส่วน</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => {
+          const total = aggregate(list).budget || 1;
+          return `
+            <tr>
+              <td><span class="category-pill">${row.name}</span></td>
+              <td>${categoryDescriptions[row.name] || "-"}</td>
+              <td class="num">${row.projects}</td>
+              <td class="num">${row.cameras || "-"}</td>
+              <td class="num">${row.poles || "-"}</td>
+              <td class="num">${formatMoney(row.budget)}</td>
+              <td class="num">${(row.budget / total * 100).toFixed(1)}%</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderTable(list) {
+  if (filters.viewMode.value === "category") {
+    renderCategoryTable(list);
+  } else {
+    renderProjectTable(list);
+  }
+}
+
+function renderAll() {
+  const list = currentData();
+  if (!list.some(p => p.id === selectedProjectId) && list.length) {
+    selectedProjectId = list[0].id;
+  }
+  renderFilterCaption();
+  renderKpis(list);
+  renderAnnualChart(list);
+  renderCategoryBars(list);
+  renderScenario();
+  renderDetail(list);
+  renderTable(list);
+}
+
+setupOptions();
+Object.values(filters).forEach(control => control.addEventListener("change", renderAll));
+document.getElementById("resetBtn").addEventListener("click", () => {
+  filters.year.value = "all";
+  filters.category.value = "all";
+  filters.method.value = "all";
+  filters.scenario.value = "35";
+  filters.viewMode.value = "project";
+  selectedProjectId = 9;
+  renderAll();
+});
+renderAll();
+</script>
+</body>
+</html>
