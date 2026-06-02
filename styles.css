@@ -1643,6 +1643,11 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
 }
 
+.category-col .badge-cost-driver {
+    position: static;
+    margin-bottom: 8px;
+}
+
 .btn-sim-cabling {
     background: linear-gradient(135deg, #0ea5e9 0%, #0c4a7e 100%);
     color: white;
