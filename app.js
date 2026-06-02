@@ -469,13 +469,13 @@ function initTrendChart() {
     const options = {
         series: [
             {
-                name: 'งบประมาณจำลอง (ล้านบาท)',
+                name: 'งบประมาณดั้งเดิม (ล้านบาท)',
                 type: 'column',
                 data: [1.900, 1.259, 2.513]
             },
             {
-                name: 'งบประมาณดั้งเดิม (ล้านบาท)',
-                type: 'line',
+                name: 'งบประมาณจำลอง (ล้านบาท)',
+                type: 'column',
                 data: [1.900, 1.259, 2.513]
             },
             {
@@ -486,29 +486,28 @@ function initTrendChart() {
         ],
         chart: {
             height: 250,
-            type: 'line',
+            type: 'bar',
             stacked: false,
             toolbar: { show: false },
             fontFamily: 'Sarabun, sans-serif'
         },
         stroke: {
-            width: [0, 3, 4],
-            dashArray: [0, 5, 0], // Dashed line for Series 1 (Original Budget)
+            width: [0, 0, 4],
             curve: 'smooth'
         },
         plotOptions: {
             bar: {
-                columnWidth: '40%',
+                columnWidth: '55%',
                 borderRadius: 4
             }
         },
-        colors: ['#0c4a7e', '#94a3b8', '#f97316'], // Dark blue simulated column, Grey baseline line, Orange line
+        colors: ['#cbd5e1', '#0ea5e9', '#f97316'], // Original (Grey), Simulated (Blue), Cameras (Orange)
         fill: {
             opacity: [1, 1, 1],
         },
         labels: ['2567', '2568', '2569'],
         markers: {
-            size: [0, 5, 5], // Show markers for line series
+            size: [0, 0, 5], // Show markers for line series only
             strokeWidth: 2,
             hover: { size: 7 }
         },
@@ -524,25 +523,25 @@ function initTrendChart() {
         },
         yaxis: [
             {
-                seriesName: 'งบประมาณจำลอง (ล้านบาท)',
+                seriesName: 'งบประมาณดั้งเดิม (ล้านบาท)',
                 axisTicks: { show: true },
                 axisBorder: {
                     show: true,
-                    color: '#0c4a7e'
+                    color: '#94a3b8'
                 },
                 labels: {
-                    style: { colors: '#0c4a7e', fontWeight: 600 },
+                    style: { colors: '#475569', fontWeight: 600 },
                     formatter: function(val) { return val.toFixed(3) + " ล้าน"; }
                 },
                 title: {
                     text: "งบประมาณซ่อมบำรุง (ล้านบาท)",
-                    style: { color: '#0c4a7e', fontWeight: 700 }
+                    style: { color: '#0f172a', fontWeight: 700 }
                 },
                 min: 0,
                 max: 3.0
             },
             {
-                seriesName: 'งบประมาณดั้งเดิม (ล้านบาท)',
+                seriesName: 'งบประมาณจำลอง (ล้านบาท)',
                 show: false,
                 min: 0,
                 max: 3.0
