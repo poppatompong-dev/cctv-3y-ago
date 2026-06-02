@@ -1261,10 +1261,33 @@ function renderCablingKPIs() {
     document.getElementById("cab-sim-savings").textContent = `ประหยัดได้: ${savings.toLocaleString()} บาท`;
     
     const savingsTextDom = document.getElementById("cab-sim-savings");
+    const budgetCard = document.getElementById("cabling-budget-card");
+    const budgetBadge = document.getElementById("cabling-budget-badge");
+
     if (reduction > 0) {
-        savingsTextDom.style.color = "var(--accent-green)";
+        savingsTextDom.style.color = "var(--accent-green-text)";
+        if (budgetCard) {
+            budgetCard.classList.remove("cabling-card-highlight", "pulse-warning");
+            budgetCard.classList.add("cabling-card-savings");
+        }
+        if (budgetBadge) {
+            budgetBadge.classList.add("badge-savings");
+            budgetBadge.innerHTML = `<i data-lucide="check-circle" size="10"></i><span>ลดงบประหยัดสำเร็จ</span>`;
+        }
     } else {
         savingsTextDom.style.color = "var(--text-secondary)";
+        if (budgetCard) {
+            budgetCard.classList.remove("cabling-card-savings");
+            budgetCard.classList.add("cabling-card-highlight", "pulse-warning");
+        }
+        if (budgetBadge) {
+            budgetBadge.classList.remove("badge-savings");
+            budgetBadge.innerHTML = `<i data-lucide="alert-triangle" size="10"></i><span>Cost Driver หลัก</span>`;
+        }
+    }
+    
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
     }
     
     // 3. Average cost per camera
@@ -1331,7 +1354,7 @@ function renderCablingTable() {
         else urgencyBadge += " e-bid";
         
         tr.innerHTML = `
-            <td data-label="ปีงบประมาณ" style="font-weight: 500; text-align:center;">${project.year}</td>
+            <td data-label="ปีงบประมาณ" class="font-outfit" style="font-weight: 500; text-align:center;">${project.year}</td>
             <td data-label="ชื่อโครงการ" style="font-weight: 600; color: var(--primary); line-height: 1.3;">${project.name}</td>
             <td data-label="พื้นที่ดำเนินการ" style="color:var(--text-secondary); font-size:0.76rem; font-weight:500;">${project.location}</td>
             <td data-label="จำนวนกล้อง" class="font-outfit" style="text-align:right; font-weight:600;">${project.cameras}</td>
@@ -1381,13 +1404,19 @@ function initCablingCharts() {
     
     // 1. Bar Chart: Yearly comparison
     const barOptions = {
-        series: [{
-            name: 'งบซ่อมสายสัญญาณ (ล้านบาท)',
-            data: [0.000, 0.964, 2.513]
-        }],
+        series: [
+            {
+                name: 'งบประมาณดั้งเดิม',
+                data: [0.000, 0.964, 2.513]
+            },
+            {
+                name: 'งบประมาณจำลอง',
+                data: [0.000, 0.964, 2.513]
+            }
+        ],
         chart: { type: 'bar', height: 210, toolbar: { show: false }, fontFamily: commonFont },
-        colors: ['#0c4a7e'],
-        plotOptions: { bar: { columnWidth: '40%', borderRadius: 4 } },
+        colors: ['#cbd5e1', '#0ea5e9'],
+        plotOptions: { bar: { columnWidth: '45%', borderRadius: 4 } },
         dataLabels: { enabled: false },
         xaxis: { categories: ['2567', '2568', '2569'] },
         yaxis: { labels: { formatter: v => v.toFixed(3) + " ล้านบาท" } }
@@ -1403,15 +1432,15 @@ function initCablingCharts() {
         dataLabels: { formatter: val => val.toFixed(1) + "%" }
     };
     
-    // 3. Line Chart: 3-Year Trend
+    // 3. Line Chart: 3-Year Trend (Cumulative Savings)
     const lineOptions = {
         series: [{
-            name: 'งบซ่อมสายสัญญาณ (ล้านบาท)',
-            data: [0.000, 0.964, 2.513]
+            name: 'ผลประหยัดงบสะสม (ล้านบาท)',
+            data: [0.000, 0.000, 0.000]
         }],
         chart: { type: 'line', height: 210, toolbar: { show: false }, fontFamily: commonFont },
         stroke: { width: 4, curve: 'smooth' },
-        colors: ['#ef4444'],
+        colors: ['#047857'],
         markers: { size: 6 },
         xaxis: { categories: ['2567', '2568', '2569'] },
         yaxis: { labels: { formatter: v => v.toFixed(3) + " ล้านบาท" } }
@@ -1533,15 +1562,23 @@ function updateCablingCharts() {
     const b2569 = 2.513 * multiplier;
     
     // 1. Update Bar Chart
-    state.charts.cabling.yearlyBar.updateSeries([{
-        name: 'งบซ่อมสายสัญญาณ (ล้านบาท)',
-        data: [0.000, b2568, b2569]
-    }]);
+    state.charts.cabling.yearlyBar.updateSeries([
+        {
+            name: 'งบประมาณดั้งเดิม',
+            data: [0.000, 0.964, 2.513]
+        },
+        {
+            name: 'งบประมาณจำลอง',
+            data: [0.000, b2568, b2569]
+        }
+    ]);
     
     // 2. Update Line Chart
+    const savings2568 = 0.964 * (reduction / 100);
+    const savings2569 = 3.477 * (reduction / 100);
     state.charts.cabling.trendLine.updateSeries([{
-        name: 'งบซ่อมสายสัญญาณ (ล้านบาท)',
-        data: [0.000, b2568, b2569]
+        name: 'ผลประหยัดงบสะสม (ล้านบาท)',
+        data: [0.000, savings2568, savings2569]
     }]);
     
     // 3. Update Scatter Plot

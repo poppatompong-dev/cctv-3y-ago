@@ -24,8 +24,9 @@
     /* Text Colors */
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-muted: #64748b; /* Improved contrast for accessibility */
     --text-light: #f8fafc;
+    --accent-green-text: #047857; /* WCAG compliant green text */
     
     /* Borders & Shadows */
     --border-color: #e2e8f0;
@@ -33,10 +34,10 @@
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-    --shadow-premium: 0 10px 30px -10px rgba(7, 40, 84, 0.08);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+    --shadow-premium: 0 10px 30px rgba(7, 40, 84, 0.08);
     
     /* Transitions */
     --transition-fast: 0.15s ease;
@@ -64,6 +65,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     color: var(--primary);
+    line-height: 1.35;
 }
 
 .font-outfit {
@@ -723,10 +725,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Colorful bars based on category */
-.bar-network { background-color: #0c4a7e; }
-.bar-system { background-color: #0b6887; }
-.bar-bands { background-color: #2b4570; }
-.bar-relocate { background-color: #d97706; }
+.bar-network { background-color: var(--accent-blue); }
+.bar-system { background-color: var(--accent-orange); }
+.bar-bands { background-color: var(--primary-light); }
+.bar-relocate { background-color: var(--accent); }
 
 .dist-sub {
     font-size: 0.7rem;
@@ -766,6 +768,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.78rem;
+    font-family: 'Outfit', 'Sarabun', sans-serif;
 }
 
 .scenario-table th, .scenario-table td {
@@ -1649,7 +1652,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-sim-cabling {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0c4a7e 100%);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-light) 100%);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -1680,6 +1683,15 @@ h1, h2, h3, h4, h5, h6 {
 .cabling-card-highlight {
     border: 2px solid var(--accent-red) !important;
     background-color: rgba(239, 68, 68, 0.03) !important;
+}
+
+.cabling-card-savings {
+    border: 2px solid var(--accent-green) !important;
+    background-color: rgba(16, 185, 129, 0.03) !important;
+}
+
+.badge-cost-driver.badge-savings {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
 }
 
 /* Charts Grid for Cabling */
@@ -1732,7 +1744,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: conic-gradient(var(--accent-red) 0% 82%, #cbd5e1 82% 100%);
+    background: conic-gradient(var(--accent-red) 0% 82%, var(--border-color) 82% 100%);
     display: flex;
     align-items: center;
     justify-content: center;
