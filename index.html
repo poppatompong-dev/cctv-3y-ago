@@ -1,1449 +1,1120 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard งบซ่อม CCTV เทศบาลนครนครสวรรค์ พ.ศ. 2567-2569</title>
-<style>
-  :root {
-    --ink: #0f1f3a;
-    --navy: #143b73;
-    --navy-2: #1f5c99;
-    --sky: #e9f2fb;
-    --line: #d8e0ea;
-    --muted: #637083;
-    --paper: #f6f8fb;
-    --white: #ffffff;
-    --amber: #d98400;
-    --amber-soft: #fff4df;
-    --green: #16834b;
-    --green-soft: #e9f7ef;
-    --red: #b42318;
-    --shadow: 0 14px 36px rgba(15, 31, 58, 0.10);
-    --radius: 8px;
-  }
-
-  * { box-sizing: border-box; }
-
-  html {
-    overflow-x: hidden;
-  }
-
-  body {
-    margin: 0;
-    font-family: "Segoe UI", "Noto Sans Thai", Tahoma, sans-serif;
-    color: var(--ink);
-    background: var(--paper);
-    overflow-x: hidden;
-  }
-
-  button, select, input {
-    font: inherit;
-  }
-
-  .app-shell {
-    min-height: 100vh;
-  }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 14px 24px;
-    color: #fff;
-    background: linear-gradient(90deg, #09224a 0%, #123f78 62%, #0e2f5e 100%);
-    box-shadow: 0 5px 18px rgba(8, 24, 52, 0.22);
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-  }
-
-  .mark {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.09);
-  }
-
-  .mark svg {
-    width: 25px;
-    height: 25px;
-  }
-
-  .title-wrap {
-    min-width: 0;
-  }
-
-  .title-wrap h1 {
-    margin: 0;
-    font-size: clamp(20px, 2.1vw, 30px);
-    line-height: 1.16;
-    font-weight: 800;
-  }
-
-  .title-wrap p {
-    margin: 4px 0 0;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 13px;
-  }
-
-  .date-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-    padding: 9px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    font-size: 13px;
-    font-weight: 650;
-  }
-
-  .dashboard {
-    width: min(1540px, calc(100% - 28px));
-    margin: 14px auto 28px;
-  }
-
-  .toolbar {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
-    gap: 10px;
-    align-items: end;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--white);
-    box-shadow: 0 7px 22px rgba(15, 31, 58, 0.06);
-  }
-
-  .field label {
-    display: block;
-    margin: 0 0 5px;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 650;
-  }
-
-  .field select {
-    width: 100%;
-    min-height: 38px;
-    padding: 8px 34px 8px 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 7px;
-    background: #fff;
-    color: var(--ink);
-  }
-
-  .reset-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 38px;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 7px;
-    color: #fff;
-    background: var(--navy);
-    cursor: pointer;
-    font-weight: 700;
-  }
-
-  .reset-btn:hover { background: #0f2f5d; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1.2fr) minmax(360px, 0.9fr);
-    gap: 12px;
-    margin-top: 12px;
-  }
-
-  .panel {
-    min-width: 0;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--white);
-    box-shadow: 0 8px 26px rgba(15, 31, 58, 0.07);
-  }
-
-  .panel-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 15px 16px 8px;
-  }
-
-  .panel-title {
-    margin: 0;
-    font-size: 17px;
-    line-height: 1.3;
-    font-weight: 800;
-    color: #113769;
-  }
-
-  .panel-note {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.45;
-  }
-
-  .summary-stack {
-    display: grid;
-    gap: 8px;
-    padding: 12px;
-  }
-
-  .kpi-card {
-    display: grid;
-    grid-template-columns: 54px 1fr;
-    gap: 12px;
-    align-items: center;
-    min-height: 74px;
-    padding: 10px;
-    border: 1px solid #dfe6ef;
-    border-radius: 7px;
-    background: #fff;
-  }
-
-  .kpi-icon {
-    display: grid;
-    place-items: center;
-    width: 54px;
-    height: 54px;
-    border-radius: 7px;
-    color: #fff;
-    background: linear-gradient(160deg, #17467f, #2f6fb5);
-  }
-
-  .kpi-card.savings .kpi-icon {
-    background: linear-gradient(160deg, #16834b, #28a164);
-  }
-
-  .kpi-card.budget .kpi-icon {
-    background: linear-gradient(160deg, #d98400, #f5aa22);
-  }
-
-  .kpi-icon svg {
-    width: 29px;
-    height: 29px;
-  }
-
-  .kpi-label {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 650;
-  }
-
-  .kpi-value {
-    display: flex;
-    align-items: baseline;
-    gap: 7px;
-    margin-top: 2px;
-    font-size: 30px;
-    line-height: 1;
-    font-weight: 850;
-    color: var(--navy);
-  }
-
-  .kpi-unit {
-    color: var(--ink);
-    font-size: 12px;
-    font-weight: 650;
-  }
-
-  .sub-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr;
-    gap: 12px;
-  }
-
-  .chart-wrap {
-    min-width: 0;
-    padding: 0 16px 16px;
-  }
-
-  .annual-chart {
-    position: relative;
-    height: 326px;
-    padding: 18px 24px 34px 48px;
-  }
-
-  .axis-label {
-    position: absolute;
-    top: 10px;
-    left: 16px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .bars {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: end;
-    gap: 40px;
-    height: 230px;
-    border-left: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    background:
-      linear-gradient(to top, transparent 0, transparent 24%, rgba(216,224,234,.7) 25%, transparent 26%),
-      linear-gradient(to top, transparent 0, transparent 49%, rgba(216,224,234,.7) 50%, transparent 51%),
-      linear-gradient(to top, transparent 0, transparent 74%, rgba(216,224,234,.7) 75%, transparent 76%);
-  }
-
-  .year-col {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    height: 100%;
-  }
-
-  .budget-bar {
-    width: min(78px, 54%);
-    border-radius: 7px 7px 0 0;
-    background: linear-gradient(180deg, #1c5593, #0d3166);
-    box-shadow: 8px 0 14px rgba(15, 31, 58, 0.08);
-  }
-
-  .bar-val {
-    position: absolute;
-    bottom: calc(var(--h) + 12px);
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--ink);
-  }
-
-  .camera-dot {
-    position: absolute;
-    left: 50%;
-    bottom: var(--dot);
-    width: 16px;
-    height: 16px;
-    transform: translate(-50%, 8px);
-    border-radius: 50%;
-    background: var(--amber);
-    border: 3px solid #fff;
-    box-shadow: 0 4px 10px rgba(217, 132, 0, 0.4);
-  }
-
-  .camera-val {
-    position: absolute;
-    left: calc(50% + 18px);
-    bottom: var(--dot);
-    transform: translateY(8px);
-    color: #8a5200;
-    font-size: 12px;
-    font-weight: 800;
-  }
-
-  .year-label {
-    position: absolute;
-    bottom: -30px;
-    width: 100%;
-    text-align: center;
-    font-weight: 800;
-  }
-
-  .legend {
-    display: flex;
-    gap: 20px;
-    margin-top: 34px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .legend i {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    background: var(--navy);
-  }
-
-  .legend i.line { border-radius: 50%; background: var(--amber); }
-
-  .insight-box {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-top: 10px;
-    padding: 12px;
-    border: 1px solid #c9dced;
-    border-radius: 7px;
-    background: #f7fbff;
-  }
-
-  .insight-box strong {
-    color: #113769;
-  }
-
-  .insight-box p {
-    margin: 0;
-    color: #23324c;
-    font-size: 13px;
-    line-height: 1.55;
-  }
-
-  .ranked {
-    padding: 0 16px 16px;
-  }
-
-  .rank-row {
-    display: grid;
-    grid-template-columns: minmax(138px, 1fr) minmax(120px, 1.35fr) 86px;
-    gap: 10px;
-    align-items: center;
-    padding: 9px 0;
-    border-bottom: 1px solid #edf1f6;
-  }
-
-  .rank-row:last-child { border-bottom: none; }
-
-  .rank-name {
-    font-size: 13px;
-    font-weight: 750;
-    line-height: 1.32;
-  }
-
-  .rank-meta {
-    margin-top: 2px;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 600;
-  }
-
-  .track {
-    height: 28px;
-    border-radius: 5px;
-    background: #edf2f7;
-    overflow: hidden;
-  }
-
-  .fill {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    min-width: 24px;
-    height: 100%;
-    padding-right: 7px;
-    color: #fff;
-    background: linear-gradient(90deg, #1e5b96, #0e3267);
-    font-size: 11px;
-    font-weight: 800;
-  }
-
-  .rank-money {
-    text-align: right;
-    font-size: 12px;
-    font-weight: 800;
-  }
-
-  .scenario-panel {
-    background: linear-gradient(180deg, #f7fff9, #eff9f2);
-    border-color: #b7dbc4;
-  }
-
-  .scenario-content {
-    padding: 0 16px 16px;
-  }
-
-  .scenario-summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 11px;
-  }
-
-  .scenario-stat {
-    padding: 10px;
-    border: 1px solid #bdddc6;
-    border-radius: 7px;
-    background: #fff;
-  }
-
-  .scenario-stat .num {
-    color: var(--green);
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 850;
-  }
-
-  .scenario-stat .label {
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.35;
-  }
-
-  .scenario-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
-    border-radius: 7px;
-    background: #fff;
-    font-size: 12px;
-  }
-
-  .scenario-table th,
-  .scenario-table td {
-    padding: 9px 8px;
-    border: 1px solid #cee3d4;
-    text-align: right;
-  }
-
-  .scenario-table th:first-child,
-  .scenario-table td:first-child {
-    text-align: left;
-  }
-
-  .scenario-table th {
-    color: #10512c;
-    background: #e4f4e9;
-    font-size: 11px;
-  }
-
-  .scenario-table tr.active td {
-    background: #dcf7e5;
-    font-weight: 800;
-  }
-
-  .assumption {
-    margin: 10px 0 0;
-    color: #2c5c40;
-    font-size: 12px;
-    line-height: 1.55;
-  }
-
-  .detail-panel {
-    margin-top: 12px;
-  }
-
-  .detail-body {
-    padding: 0 16px 16px;
-  }
-
-  .detail-title {
-    margin: 0 0 8px;
-    font-size: 15px;
-    line-height: 1.45;
-  }
-
-  .detail-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-bottom: 10px;
-  }
-
-  .tag {
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #edf4fb;
-    color: #113769;
-    font-size: 11px;
-    font-weight: 750;
-  }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .mini {
-    padding: 9px;
-    border: 1px solid #dfe6ef;
-    border-radius: 7px;
-    background: #fff;
-  }
-
-  .mini b {
-    display: block;
-    font-size: 17px;
-    color: var(--navy);
-  }
-
-  .mini span {
-    color: var(--muted);
-    font-size: 11px;
-  }
-
-  .table-panel {
-    grid-column: 1 / span 2;
-  }
-
-  .roadmap-panel {
-    grid-column: 3;
-  }
-
-  .table-wrap {
-    width: calc(100% - 24px);
-    max-width: calc(100% - 24px);
-    max-height: 318px;
-    overflow: auto;
-    margin: 0 12px 12px;
-    border: 1px solid var(--line);
-    border-radius: 7px;
-  }
-
-  table.report-table {
-    width: 100%;
-    min-width: 860px;
-    border-collapse: collapse;
-    font-size: 12px;
-  }
-
-  .report-table th,
-  .report-table td {
-    padding: 9px 10px;
-    border-bottom: 1px solid #edf1f6;
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .report-table th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    color: #fff;
-    background: #123f78;
-    font-size: 11px;
-    white-space: nowrap;
-  }
-
-  .report-table td.num {
-    text-align: right;
-    white-space: nowrap;
-    font-weight: 750;
-  }
-
-  .report-table tbody tr {
-    cursor: pointer;
-  }
-
-  .report-table tbody tr:hover,
-  .report-table tbody tr.selected {
-    background: #f1f7fd;
-  }
-
-  .category-pill {
-    display: inline-block;
-    max-width: 220px;
-    padding: 3px 7px;
-    border-radius: 999px;
-    background: #edf4fb;
-    color: #113769;
-    font-size: 11px;
-    font-weight: 750;
-    white-space: normal;
-  }
-
-  .roadmap {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 0 16px 16px;
-  }
-
-  .horizon {
-    border: 1px solid #dde7ef;
-    border-radius: 7px;
-    overflow: hidden;
-    background: #fff;
-  }
-
-  .horizon h3 {
-    margin: 0;
-    padding: 10px 12px;
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.3;
-  }
-
-  .horizon.short h3 { background: var(--green); }
-  .horizon.mid h3 { background: var(--amber); }
-  .horizon.long h3 { background: var(--navy); }
-
-  .horizon ul {
-    margin: 0;
-    padding: 10px 12px 12px 27px;
-    font-size: 12px;
-    line-height: 1.72;
-  }
-
-  .footer-note {
-    margin: 12px 2px 0;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.55;
-  }
-
-  .empty {
-    padding: 24px;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  @media (max-width: 1180px) {
-    .toolbar {
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
-    }
-    .grid {
-      grid-template-columns: 1fr;
-    }
-    .table-panel,
-    .roadmap-panel {
-      grid-column: auto;
-    }
-    .sub-grid {
-      grid-template-columns: 1fr;
-    }
-    .summary-stack {
-      grid-template-columns: repeat(2, minmax(180px, 1fr));
-    }
-  }
-
-  @media (max-width: 760px) {
-    .topbar {
-      align-items: flex-start;
-      flex-direction: column;
-      padding: 14px;
-    }
-    .dashboard {
-      width: min(100% - 16px, 1540px);
-      margin-top: 8px;
-    }
-    .toolbar {
-      grid-template-columns: 1fr;
-    }
-    .summary-stack,
-    .scenario-summary,
-    .detail-grid {
-      grid-template-columns: 1fr;
-    }
-    .annual-chart {
-      height: 290px;
-      padding-left: 30px;
-    }
-    .bars {
-      gap: 12px;
-    }
-    .rank-row {
-      grid-template-columns: 1fr;
-      gap: 5px;
-    }
-    .rank-money {
-      text-align: left;
-    }
-  }
-
-  @media print {
-    body { background: #fff; }
-    .toolbar { display: none; }
-    .dashboard { width: 100%; margin: 0; }
-    .panel, .toolbar { box-shadow: none; }
-    .grid { grid-template-columns: 1fr; }
-    .table-panel, .roadmap-panel { grid-column: auto; }
-    .table-wrap { max-height: none; overflow: visible; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แดชบอร์ดงบซ่อม CCTV | เทศบาลนครนครสวรรค์</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- ApexCharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-<div class="app-shell">
-  <header class="topbar">
-    <div class="brand">
-      <div class="mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M5 4h14v8.8c0 4.2-2.7 6.9-7 8.2-4.3-1.3-7-4-7-8.2V4Z" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M8 12.4h8M8 8.3h8M8 16.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="title-wrap">
-        <h1>แดชบอร์ดงบซ่อม CCTV เทศบาลนครนครสวรรค์</h1>
-        <p>ข้อมูลจากรายงานซ่อมกล้อง พ.ศ. 2567-2569 สำหรับวางแผนงบประมาณและปรับปรุงระบบ</p>
-      </div>
-    </div>
-    <div class="date-chip">
-      <span>ข้อมูล ณ รายงานวันที่ 12 พ.ค. 2569</span>
-    </div>
-  </header>
 
-  <main class="dashboard">
-    <section class="toolbar" aria-label="ตัวกรองรายงาน">
-      <div class="field">
-        <label for="yearFilter">ช่วงปี</label>
-        <select id="yearFilter">
-          <option value="all">2567-2569</option>
-          <option value="2567">พ.ศ. 2567</option>
-          <option value="2568">พ.ศ. 2568</option>
-          <option value="2569">พ.ศ. 2569</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="categoryFilter">ประเภทรายการซ่อม</label>
-        <select id="categoryFilter">
-          <option value="all">ทั้งหมด</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="methodFilter">วิธีจัดซื้อจัดจ้าง</label>
-        <select id="methodFilter">
-          <option value="all">ทั้งหมด</option>
-          <option value="เฉพาะเจาะจง">เฉพาะเจาะจง</option>
-          <option value="คัดเลือก">คัดเลือก</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="scenarioSelect">Scenario ลดงบซ่อม</label>
-        <select id="scenarioSelect">
-          <option value="0">ฐานข้อมูลเดิม</option>
-          <option value="20">ลด 20%</option>
-          <option value="35" selected>ลด 35%</option>
-          <option value="50">ลด 50%</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="viewMode">มุมมองตาราง</label>
-        <select id="viewMode">
-          <option value="project">รายโครงการ</option>
-          <option value="category">สรุปตามประเภท</option>
-        </select>
-      </div>
-      <button class="reset-btn" id="resetBtn" type="button">
-        รีเซ็ตตัวกรอง
-      </button>
-    </section>
-
-    <section class="grid">
-      <aside class="panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">ภาพรวมที่เลือก</h2>
-            <p class="panel-note" id="filterCaption">รวมข้อมูล 3 ปี</p>
-          </div>
-        </div>
-        <div class="summary-stack" id="kpiStack"></div>
-      </aside>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">แนวโน้มงบประมาณและจำนวนกล้องรายปี</h2>
-            <p class="panel-note">คลิกตัวกรองด้านบนเพื่อดูเฉพาะปีหรือประเภทงานที่สนใจ</p>
-          </div>
-        </div>
-        <div class="chart-wrap">
-          <div class="annual-chart">
-            <div class="axis-label">ล้านบาท</div>
-            <div class="bars" id="annualBars"></div>
-            <div class="legend">
-              <span><i></i>งบประมาณ</span>
-              <span><i class="line"></i>จำนวนกล้อง</span>
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <!-- High-fidelity SVG of Nakhon Sawan Municipality Seal -->
+                <svg class="municipality-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="#1e3a8a" stroke="#f59e0b" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="3,3"/>
+                    <path d="M15 50 Q 50 65, 85 50" fill="none" stroke="#60a5fa" stroke-width="3"/>
+                    <path d="M20 57 Q 50 72, 80 57" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                    <path d="M25 64 Q 50 78, 75 64" fill="none" stroke="#1d4ed8" stroke-width="1.5"/>
+                    <!-- Sailing Junk Boat (traditional symbol of Nakhon Sawan/river junction) -->
+                    <path d="M35 52 L38 42 L62 42 L65 52 Z" fill="#ffffff" stroke="#1e293b" stroke-width="1.5"/>
+                    <path d="M50 42 L50 20 L58 30 L50 34" fill="#f59e0b" stroke="#ffffff" stroke-width="1"/>
+                    <line x1="50" y1="42" x2="50" y2="20" stroke="#ffffff" stroke-width="2"/>
+                    <path d="M42 42 L42 26 L47 32 L42 35" fill="#f59e0b" stroke="#ffffff" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="2" fill="#ef4444"/>
+                    <!-- Thai text ring decoration simplified as circular path -->
+                    <path id="textPath" d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" fill="none" />
+                </svg>
+                <div class="header-title-container">
+                    <h1 class="header-title">
+                        แดชบอร์ดงบซ่อม CCTV <span class="divider">|</span> <span class="sub">เทศบาลนครนครสวรรค์</span>
+                    </h1>
+                </div>
             </div>
-          </div>
-          <div class="insight-box">
-            <div class="kpi-icon" style="width:40px;height:40px;border-radius:7px;">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 19V9M12 19V5M19 19v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+            <div class="header-right">
+                <div class="header-meta-info">
+                    <div>ข้อมูลจากรายงานซ่อมกล้อง พ.ศ. 2567-2569</div>
+                </div>
+                <div class="header-date-badge">
+                    <i data-lucide="calendar"></i>
+                    <span id="header-date">วันที่ 12 พ.ค. 2569</span>
+                </div>
             </div>
-            <p id="trendInsight"><strong>ข้อสังเกต:</strong> ปี 2569 เป็นโครงการเดียวขนาดใหญ่ ครอบคลุม 230 กล้อง ด้วยงบ 2.513 ล้านบาท</p>
-          </div>
-        </div>
-      </section>
+        </header>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">งบประมาณตามประเภทรายการซ่อม</h2>
-            <p class="panel-note">แจกแจงจากคำในรายงาน ไม่ใช่อาการเสียรายกล้อง</p>
-          </div>
-        </div>
-        <div class="ranked" id="categoryBars"></div>
-      </section>
-
-      <section class="panel scenario-panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">Scenario ลดงบซ่อม</h2>
-            <p class="panel-note">ปรับจากตัวเลือกด้านบนเพื่อคุยผลประหยัดเชิงแผน</p>
-          </div>
-        </div>
-        <div class="scenario-content">
-          <div class="scenario-summary">
-            <div class="scenario-stat">
-              <div class="num" id="baseAnnual">1.891</div>
-              <div class="label">ฐานเฉลี่ยงบซ่อม/ปี<br>ล้านบาท</div>
+        <!-- Filter Bar -->
+        <section class="filter-bar" aria-label="ตัวกรองแดชบอร์ด">
+            <!-- Mobile Toggle Filters Button -->
+            <button id="btn-toggle-filters" class="btn-toggle-filters">
+                <i data-lucide="filter" size="16"></i>
+                <span>ตัวเลือกตัวกรอง</span>
+                <i data-lucide="chevron-down" size="16" class="chevron-icon" id="filter-chevron"></i>
+            </button>
+            
+            <div class="filter-wrapper-mobile" id="filter-wrapper-mobile">
+                <div class="filter-group">
+                    <label for="filter-year" class="filter-label">ช่วงปี</label>
+                    <select id="filter-year" class="filter-select">
+                        <option value="2567-2569">2567 - 2569</option>
+                        <option value="2567">2567</option>
+                        <option value="2568">2568</option>
+                        <option value="2569">2569</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-jobtype" class="filter-label">ประเภทงาน</label>
+                    <select id="filter-jobtype" class="filter-select">
+                        <option value="ทั้งหมด">ทั้งหมด</option>
+                        <option value="ซ่อมระบบกล้อง">ซ่อมระบบกล้อง</option>
+                        <option value="งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า">งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า</option>
+                        <option value="ย้าย/เดินสายส่งสัญญาณ">ย้าย/เดินสายส่งสัญญาณ</option>
+                        <option value="ติดแถบสีสายสัญญาณ">ติดแถบสีสายสัญญาณ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-status" class="filter-label">สถานะโครงการ</label>
+                    <select id="filter-status" class="filter-select">
+                        <option value="ทั้งหมด">ทั้งหมด</option>
+                        <option value="เสร็จสิ้น">ดำเนินการเสร็จสิ้น</option>
+                        <option value="อยู่ระหว่างดำเนินการ">อยู่ระหว่างดำเนินการ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-scenario" class="filter-label">Scenario ลดงบซ่อม</label>
+                    <select id="filter-scenario" class="filter-select">
+                        <option value="ฐานข้อมูล">ฐานข้อมูล (ไม่ลด)</option>
+                        <option value="ลด 20%">ลด 20%</option>
+                        <option value="ลด 35%">ลด 35%</option>
+                        <option value="ลด 50%">ลด 50%</option>
+                    </select>
+                </div>
+                <button id="btn-reset-filters" class="btn-reset">
+                    <i data-lucide="rotate-ccw" size="16"></i>
+                    <span>รีเซ็ตตัวกรอง</span>
+                </button>
             </div>
-            <div class="scenario-stat">
-              <div class="num" id="savingAnnual">0.662</div>
-              <div class="label">ประหยัดได้/ปี<br>ล้านบาท</div>
+        </section>
+
+        <!-- Dashboard Tabs Switcher -->
+        <div class="dashboard-tabs-container" id="dashboard-tabs">
+            <button class="tab-trigger active" onclick="switchDashboardTab('overall')" id="tab-btn-overall">
+                <i data-lucide="layout-dashboard" size="16"></i>
+                <span>ภาพรวมงบซ่อมทั้งหมด</span>
+            </button>
+            <button class="tab-trigger" onclick="switchDashboardTab('cabling')" id="tab-btn-cabling">
+                <i data-lucide="git-fork" size="16"></i>
+                <span>วิเคราะห์สายสัญญาณ & ระบบไฟฟ้า (Cost Driver หลัก)</span>
+            </button>
+        </div>
+
+        <!-- Overall Dashboard View -->
+        <div id="overall-dashboard-view">
+
+            <!-- Upper Section Grid -->
+            <main class="grid-upper">
+            
+            <!-- Left Column: KPIs and Averages -->
+            <aside class="col-left">
+                <!-- Section: Summary -->
+                <div class="col-left-section">
+                    <div class="section-label">
+                        <i data-lucide="info" size="14"></i>
+                        <span id="kpi-section-title">ภาพรวม 3 ปี (2567-2569)</span>
+                    </div>
+                    
+                    <!-- KPI Cards Grid (Responsive Layout) -->
+                    <div class="kpis-grid-mobile">
+                        <div class="kpi-card kpi-blue" id="kpi-projects-card">
+                            <div class="kpi-icon-container">
+                                <i data-lucide="clipboard-check" size="24"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">โครงการทั้งหมด</span>
+                                <div class="kpi-value-container">
+                                    <span class="kpi-value" id="kpi-projects">9</span>
+                                    <span class="kpi-unit">โครงการ</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-teal" id="kpi-cameras-card">
+                            <div class="kpi-icon-container">
+                                <i data-lucide="cctv" size="24"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">กล้องที่ซ่อมทั้งหมด</span>
+                                <div class="kpi-value-container">
+                                    <span class="kpi-value" id="kpi-cameras">394</span>
+                                    <span class="kpi-unit">กล้อง</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-indigo" id="kpi-poles-card">
+                            <div class="kpi-icon-container">
+                                <i data-lucide="utility-pole" style="font-size: 24px; line-height: 1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 5h14M3 10h18M8 15h8"/></svg></i>
+                            </div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">เสาที่ติดแถบสีสายสัญญาณ</span>
+                                <div class="kpi-value-container">
+                                    <span class="kpi-value" id="kpi-poles">870</span>
+                                    <span class="kpi-unit">เสา</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-gold" id="kpi-budget-card">
+                            <div class="kpi-icon-container">
+                                <i data-lucide="coins" size="24"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <span class="kpi-label" id="budget-kpi-label">งบรวม</span>
+                                <div class="kpi-value-container">
+                                    <span class="kpi-value" id="kpi-budget">5.672</span>
+                                    <span class="kpi-unit">ล้านบาท</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Yearly Averages -->
+                <div class="col-left-section">
+                    <div class="section-label">
+                        <i data-lucide="trending-up" size="14"></i>
+                        <span id="avg-section-title">ค่าเฉลี่ยต่อปี (ย้อนหลัง 3 ปี)</span>
+                    </div>
+
+                    <!-- Average Cards -->
+                    <div class="avg-card" id="avg-budget-card">
+                        <div class="avg-icon-container">
+                            <i data-lucide="coins" size="16"></i>
+                        </div>
+                        <div class="avg-content">
+                            <span class="avg-label">เฉลี่ยงบซ่อม/ปี</span>
+                            <div class="avg-value-container">
+                                <span class="avg-value" id="avg-budget">1.891</span>
+                                <span class="avg-unit">ล้านบาท/ปี</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avg-card" id="avg-cameras-card">
+                        <div class="avg-icon-container">
+                            <i data-lucide="cctv" size="16"></i>
+                        </div>
+                        <div class="avg-content">
+                            <span class="avg-label">เฉลี่ยซ่อมกล้อง/ปี</span>
+                            <div class="avg-value-container">
+                                <span class="avg-value" id="avg-cameras">131</span>
+                                <span class="avg-unit">กล้อง/ปี</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avg-card" id="avg-poles-card">
+                        <div class="avg-icon-container">
+                            <i data-lucide="utility-pole" style="font-size: 16px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 5h14M3 10h18M8 15h8"/></svg></i>
+                        </div>
+                        <div class="avg-content">
+                            <span class="avg-label">เฉลี่ยเสา/ปี</span>
+                            <div class="avg-value-container">
+                                <span class="avg-value" id="avg-poles">290</span>
+                                <span class="avg-unit">เสา/ปี</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Middle Column: Trend Chart & Category Grid -->
+            <section class="col-middle" aria-label="ข้อมูลแนวโน้มและประเภทงาน">
+                <!-- Trend Chart Card -->
+                <div class="dashboard-card chart-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="area-chart"></i>
+                            <span>แนวโน้มงบประมาณ และจำนวนกล้อง รายปี</span>
+                        </h2>
+                    </div>
+                    <!-- ApexCharts Element with Mobile Scroll Wrapper -->
+                    <div class="chart-scroll-wrapper">
+                        <div class="chart-wrapper">
+                            <div id="trend-chart"></div>
+                        </div>
+                    </div>
+                    <!-- Dynamic Insight Box -->
+                    <div class="insight-box" id="dynamic-insight">
+                        <div class="insight-icon-container">
+                            <i data-lucide="sparkles" size="18"></i>
+                        </div>
+                        <div id="insight-text">
+                            ปี 2569 ใช้งบสูงสุด 2.513 ล้านบาท และซ่อมครอบคลุมกล้องมากสุด 230 ตัว การรวมงานเป็นโครงการใหญ่ช่วยเพิ่มประสิทธิภาพและคุ้มค่ากว่าแบ่งซ่อมหลายรอบ
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown Card -->
+                <div class="dashboard-card category-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="grid"></i>
+                            <span id="cat-title-text">จำแนกประเภทรายการซ่อม (รวม 3 ปี)</span>
+                        </h2>
+                    </div>
+                    <div class="category-grid" id="category-grid-container">
+                        <!-- Column 1: CCTV System Repair -->
+                        <div class="category-col" id="cat-col-system" onclick="selectCategoryFilter('ซ่อมระบบกล้อง')">
+                            <div class="cat-header">
+                                <h3 class="cat-title">
+                                    <i data-lucide="cctv" size="16"></i>
+                                    <span>ซ่อมระบบกล้อง</span>
+                                </h3>
+                            </div>
+                            <ul class="cat-list">
+                                <li>กล้องไม่แสดงภาพ/ภาพเบลอ</li>
+                                <li>เลนส์ / ซูม / โฟกัสมีปัญหา</li>
+                                <li>กล้องเสีย / เปลี่ยนกล้อง</li>
+                                <li>อุปกรณ์ยึดกล้อง/น็อต/เสา</li>
+                                <li>อุปกรณ์ประกอบอื่น ๆ</li>
+                            </ul>
+                            <div class="cat-footer">
+                                <div class="cat-budget">1,737,000 บาท</div>
+                                <div class="cat-details">119 กล้อง</div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Cabling/Network & Electrical -->
+                        <div class="category-col pulse-warning" id="cat-col-network" onclick="selectCategoryFilter('งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า')">
+                            <div class="badge-cost-driver">
+                                <i data-lucide="alert-triangle" size="12"></i>
+                                <span>Cost Driver หลัก</span>
+                            </div>
+                            <div class="cat-header">
+                                <h3 class="cat-title">
+                                    <i data-lucide="git-fork" size="16"></i>
+                                    <span>งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า</span>
+                                </h3>
+                            </div>
+                            <ul class="cat-list">
+                                <li>ซ่อมสายไฟเบอร์ออปติก</li>
+                                <li>ซ่อมสายสัญญาณ UTP</li>
+                                <li>หัวต่อไฟเบอร์ / Patch Panel</li>
+                                <li>สวิตช์ เครือข่าย / Media Converter</li>
+                                <li>ระบบไฟฟ้า / ปลั๊ก / เบรกเกอร์</li>
+                                <li>อุปกรณ์จ่ายไฟ PoE / UPS</li>
+                            </ul>
+                            <div class="cat-footer" style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
+                                <div class="cat-budget">3,477,000 บาท</div>
+                                <div class="cat-details">275 กล้อง</div>
+                                <button class="btn-sim-cabling" onclick="event.stopPropagation(); switchDashboardTab('cabling')">
+                                    <i data-lucide="arrow-up-right" size="12"></i>
+                                    <span>ดูรายละเอียดเจาะลึก</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Relocate/Install Cable -->
+                        <div class="category-col" id="cat-col-relocate" onclick="selectCategoryFilter('ย้าย/เดินสายส่งสัญญาณ')">
+                            <div class="cat-header">
+                                <h3 class="cat-title">
+                                    <i data-lucide="move" size="16"></i>
+                                    <span>ย้าย/เดินสายส่งสัญญาณ</span>
+                                </h3>
+                            </div>
+                            <ul class="cat-list">
+                                <li>เคลื่อนย้ายอุปกรณ์</li>
+                                <li>เดินสายใหม่ตามเส้นทาง</li>
+                                <li>ติดตั้งอุปกรณ์เชื่อมต่อ</li>
+                            </ul>
+                            <div class="cat-footer">
+                                <div class="cat-budget">163,000 บาท</div>
+                                <div class="cat-details">- กล้อง</div>
+                            </div>
+                        </div>
+
+                        <!-- Column 4: Cable Color Bands -->
+                        <div class="category-col" id="cat-col-bands" onclick="selectCategoryFilter('ติดแถบสีสายสัญญาณ')">
+                            <div class="cat-header">
+                                <h3 class="cat-title">
+                                    <i data-lucide="tag" size="16"></i>
+                                    <span>ติดแถบสีสายสัญญาณ</span>
+                                </h3>
+                            </div>
+                            <ul class="cat-list">
+                                <li>ติดแถบสีระบุสาย</li>
+                                <li>ติดรหัส/ฉลากสาย</li>
+                                <li>ตรวจสอบแนวสาย</li>
+                            </ul>
+                            <div class="cat-footer">
+                                <div class="cat-budget">295,000 บาท</div>
+                                <div class="cat-details">870 เสา</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Budget Breakdown & Scenario Table -->
+            <section class="col-right" aria-label="งบประมาณและแบบจำลองแผนงาน">
+                <!-- Budget by Job Type Card -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="bar-chart-2"></i>
+                            <span id="dist-title-text">งบประมาณตามประเภทงาน (รวม 3 ปี)</span>
+                        </h2>
+                    </div>
+                    
+                    <div class="distribution-list" id="distribution-container">
+                        <!-- Cabling/Network -->
+                        <div class="dist-item" id="dist-item-network" onclick="selectCategoryFilter('งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า')">
+                            <div class="dist-header">
+                                <span class="dist-label">งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า</span>
+                                <div class="dist-budget-container">
+                                    <span class="dist-budget">3,477,000</span> <span class="dist-pct">61.3%</span>
+                                </div>
+                            </div>
+                            <div class="dist-bar-wrapper">
+                                <div class="dist-bar bar-network" style="width: 61.3%;"></div>
+                            </div>
+                            <div class="dist-sub">275 กล้อง</div>
+                        </div>
+
+                        <!-- CCTV Repair -->
+                        <div class="dist-item" id="dist-item-system" onclick="selectCategoryFilter('ซ่อมระบบกล้อง')">
+                            <div class="dist-header">
+                                <span class="dist-label">ซ่อมระบบกล้อง</span>
+                                <div class="dist-budget-container">
+                                    <span class="dist-budget">1,737,000</span> <span class="dist-pct">30.6%</span>
+                                </div>
+                            </div>
+                            <div class="dist-bar-wrapper">
+                                <div class="dist-bar bar-system" style="width: 30.6%;"></div>
+                            </div>
+                            <div class="dist-sub">119 กล้อง</div>
+                        </div>
+
+                        <!-- Cable Color Bands -->
+                        <div class="dist-item" id="dist-item-bands" onclick="selectCategoryFilter('ติดแถบสีสายสัญญาณ')">
+                            <div class="dist-header">
+                                <span class="dist-label">ติดแถบสีสายสัญญาณ</span>
+                                <div class="dist-budget-container">
+                                    <span class="dist-budget">295,000</span> <span class="dist-pct">5.2%</span>
+                                </div>
+                            </div>
+                            <div class="dist-bar-wrapper">
+                                <div class="dist-bar bar-bands" style="width: 5.2%;"></div>
+                            </div>
+                            <div class="dist-sub">870 เสา</div>
+                        </div>
+
+                        <!-- Cable Relocation -->
+                        <div class="dist-item" id="dist-item-relocate" onclick="selectCategoryFilter('ย้าย/เดินสายส่งสัญญาณ')">
+                            <div class="dist-header">
+                                <span class="dist-label">ย้าย/เดินสายส่งสัญญาณ</span>
+                                <div class="dist-budget-container">
+                                    <span class="dist-budget">163,000</span> <span class="dist-pct">2.9%</span>
+                                </div>
+                            </div>
+                            <div class="dist-bar-wrapper">
+                                <div class="dist-bar bar-relocate" style="width: 2.9%;"></div>
+                            </div>
+                            <div class="dist-sub">-</div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="dist-total">
+                            <span>รวมทั้งสิ้น</span>
+                            <span id="dist-total-val">5,672,000 บาท</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario Planning Card -->
+                <div class="dashboard-card scenario-table-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="sliders"></i>
+                            <span>Scenario ลดงบซ่อม <span style="font-weight: 500; font-size: 0.85em; opacity: 0.8;">(สมมติฐานเพื่อวางแผน)</span></span>
+                        </h2>
+                    </div>
+                    <p class="scenario-desc">คลิกเลือกเพื่อจำลองสถานการณ์ลดงบประมาณซ่อมบำรุงและดูการเปลี่ยนแปลงของตัวชี้วัด</p>
+                    <table class="scenario-table" id="scenario-data-table">
+                        <thead>
+                            <tr>
+                                <th>สมมติฐานลดลง</th>
+                                <th>งบซ่อมเฉลี่ย/ปี</th>
+                                <th>ประหยัดได้/ปี</th>
+                                <th>ประหยัดได้/3 ปี</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Baseline -->
+                            <tr class="baseline-row selected-scenario" onclick="selectScenario('ฐานข้อมูล')" id="row-scenario-base">
+                                <td>ฐานข้อมูล (ไม่ลด)</td>
+                                <td>1.891 ล้าน</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <!-- 20% -->
+                            <tr onclick="selectScenario('ลด 20%')" id="row-scenario-20">
+                                <td>ลด 20%</td>
+                                <td>1.513 ล้าน</td>
+                                <td>0.378 ล้าน</td>
+                                <td>1.135 ล้าน</td>
+                            </tr>
+                            <!-- 35% -->
+                            <tr onclick="selectScenario('ลด 35%')" id="row-scenario-35">
+                                <td>ลด 35%</td>
+                                <td>1.229 ล้าน</td>
+                                <td>0.662 ล้าน</td>
+                                <td>1.986 ล้าน</td>
+                            </tr>
+                            <!-- 50% -->
+                            <tr onclick="selectScenario('ลด 50%')" id="row-scenario-50">
+                                <td>ลด 50%</td>
+                                <td>0.946 ล้าน</td>
+                                <td>0.945 ล้าน</td>
+                                <td>2.835 ล้าน</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="scenario-note">
+                        หมายเหตุ: เป็นสมมติฐานเพื่อการวางแผนงบประมาณ ยังไม่รวมต้นทุนโครงการปรับปรุงระบบ
+                    </div>
+                    <button class="btn-sim-cabling" style="width: 100%; margin-top: 12px; justify-content: center;" onclick="switchDashboardTab('cabling')">
+                        <i data-lucide="sliders" size="14"></i>
+                        <span>จำลองลดค่าซ่อมสายสัญญาณ (10% - 30%)</span>
+                    </button>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Lower Section Grid -->
+        <section class="grid-lower" aria-label="ตารางรายละเอียดและแนวทางปฏิบัติ">
+            <!-- Project Details Table Card -->
+            <div class="dashboard-card projects-card">
+                <div class="card-title-bar">
+                    <h2 class="card-title">
+                        <i data-lucide="list-collapse"></i>
+                        <span>รายละเอียดโครงการซ่อม <span style="font-weight: 500; font-size: 0.85em; opacity: 0.8;">(คลิกแถวเพื่อดูรายละเอียดเชิงลึก)</span></span>
+                    </h2>
+                </div>
+
+                <div class="table-header-controls">
+                    <!-- Search Control -->
+                    <div class="search-wrapper">
+                        <i data-lucide="search" size="16" class="search-icon"></i>
+                        <input type="text" id="project-search" class="search-input" placeholder="ค้นหาชื่อโครงการหรือสถานที่...">
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);" id="table-count-label">
+                        แสดง 5 จาก 9 รายการ
+                    </div>
+                </div>
+
+                <!-- Desktop Table View -->
+                <div class="table-wrapper" id="desktop-table-wrapper">
+                    <table class="data-table" id="projects-data-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortTable('year')">ปี</th>
+                                <th class="sortable" onclick="sortTable('id')">ลำดับ</th>
+                                <th class="sortable" onclick="sortTable('name')">ชื่อโครงการ</th>
+                                <th class="sortable" onclick="sortTable('jobtype')">ประเภทงานหลัก</th>
+                                <th class="sortable" onclick="sortTable('cameras')">กล้อง (ตัว)</th>
+                                <th class="sortable" onclick="sortTable('poles')">เสา (ต้น)</th>
+                                <th class="sortable" onclick="sortTable('budget')">งบประมาณ (บาท)</th>
+                                <th class="sortable" onclick="sortTable('procure')">วิธีจัดซื้อจัดจ้าง</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projects-table-body">
+                            <!-- Dynamic Table Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Card List View (UX Responsive Choice) -->
+                <div class="projects-mobile-list" id="projects-mobile-list">
+                    <!-- Dynamic Mobile Cards drawn by app.js -->
+                </div>
+
+                <!-- Pagination Control -->
+                <div class="pagination-controls">
+                    <div>
+                        หน้า <span id="page-current">1</span> จาก <span id="page-total">2</span>
+                    </div>
+                    <div class="page-btn-group">
+                        <button class="btn-page" id="btn-page-prev" onclick="changePage(-1)">ก่อนหน้า</button>
+                        <div id="page-numbers" style="display: flex; gap: 4px;">
+                            <!-- Page numbers -->
+                        </div>
+                        <button class="btn-page" id="btn-page-next" onclick="changePage(1)">ถัดไป</button>
+                    </div>
+                </div>
             </div>
-            <div class="scenario-stat">
-              <div class="num" id="savingThreeYears">1.986</div>
-              <div class="label">ประหยัดได้/3 ปี<br>ล้านบาท</div>
+
+            <!-- 3-Stage Budget Guidelines Card -->
+            <div class="dashboard-card guideline-card">
+                <div class="card-title-bar">
+                    <h2 class="card-title">
+                        <i data-lucide="milestone"></i>
+                        <span>แนวทางจัดทำงบประมาณ 3 ระยะ</span>
+                    </h2>
+                </div>
+                <div class="guideline-container">
+                    <!-- Mobile Tab Bar (UX Responsive Accordion Option) -->
+                    <div class="guideline-tabs" id="guideline-mobile-tabs">
+                        <button class="tab-btn active-tab" id="tab-btn-short" onclick="switchGuidelineTab('short')">ระยะสั้น</button>
+                        <button class="tab-btn" id="tab-btn-mid" onclick="switchGuidelineTab('mid')">ระยะกลาง</button>
+                        <button class="tab-btn" id="tab-btn-long" onclick="switchGuidelineTab('long')">ระยะยาว</button>
+                    </div>
+
+                    <!-- Short Term -->
+                    <div class="guide-step step-short" id="guide-step-short">
+                        <div class="guide-step-header">
+                            <span>ระยะสั้น (0-1 ปี)</span>
+                            <i data-lucide="check-circle" size="14"></i>
+                        </div>
+                        <div class="guide-step-body">
+                            <ul class="guide-list">
+                                <li>สำรวจจุดเสี่ยงและจุดซ่อมบ่อยเพื่อวิเคราะห์สาเหตุเชิงลึก</li>
+                                <li>บำรุงรักษาเชิงป้องกัน (PM) เพื่อยืดอายุการใช้งานอุปกรณ์</li>
+                                <li>จัดลำดับความสำคัญของกล้องตามจุดประสงค์ความมั่นคงปลอดภัย</li>
+                                <li>แก้ไขข้อขัดข้องในจุดหลักที่กระทบต่อการใช้งานของประชาชน</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Medium Term -->
+                    <div class="guide-step step-mid" id="guide-step-mid">
+                        <div class="guide-step-header">
+                            <span>ระยะกลาง (1-3 ปี)</span>
+                            <i data-lucide="wrench" size="14"></i>
+                        </div>
+                        <div class="guide-step-body">
+                            <ul class="guide-list">
+                                <li>ปรับปรุงสายสัญญาณเครือข่ายหลักและระบบจ่ายไฟ</li>
+                                <li>รวมการจ้างซ่อมบำรุงรักษาเข้าเป็นสัญญารายปี</li>
+                                <li>กำหนดมาตรฐานข้อตกลงระดับบริการ (SLA) และตัวชี้วัด (KPI)</li>
+                                <li>จัดสรรงบประมาณตามเกณฑ์ความเสี่ยงของแต่ละเขตพื้นที่</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Long Term -->
+                    <div class="guide-step step-long" id="guide-step-long">
+                        <div class="guide-step-header">
+                            <span>ระยะยาว (3 ปีขึ้นไป)</span>
+                            <i data-lucide="line-chart" size="14"></i>
+                        </div>
+                        <div class="guide-step-body">
+                            <ul class="guide-list">
+                                <li>วางแผนเปลี่ยนอุปกรณ์กล้องที่ชำรุดตามกรอบอายุใช้งาน</li>
+                                <li>กำหนดมาตรฐานสเปกอุปกรณ์ให้มีความสอดคล้องระดับเดียวกัน</li>
+                                <li>จัดหาระบบ Monitoring เพื่อวิเคราะห์ปัญหาอัตโนมัติรายวัน</li>
+                                <li>ลดการซ่อมแบบฉุกเฉินและเพิ่มเสถียรภาพการใช้ระบบภาพรวม</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <table class="scenario-table" aria-label="ตารางสมมติฐานลดงบซ่อม">
-            <thead>
-              <tr>
-                <th>สมมติฐาน</th>
-                <th>งบซ่อม/ปี</th>
-                <th>ประหยัด/ปี</th>
-                <th>ประหยัด/3 ปี</th>
-              </tr>
-            </thead>
-            <tbody id="scenarioRows"></tbody>
-          </table>
-          <p class="assumption">หมายเหตุ: เป็นสมมติฐานเพื่อวางแผนงบประมาณ ไม่ใช่ผลรับประกัน และยังไม่รวมต้นทุนโครงการปรับปรุงระบบ</p>
+        </section>
+
+        </div> <!-- End Overall Dashboard View -->
+
+        <!-- Cabling & Network Deep Dive View (Cost Driver Analysis) -->
+        <div id="cabling-dashboard-view" class="hidden">
+            
+            <!-- Executive Summary & Quick Action Card -->
+            <div class="summary-quote-box">
+                <i data-lucide="info" class="summary-quote-icon" size="24"></i>
+                <div>
+                    <strong>สรุปสำหรับผู้บริหาร:</strong> งบซ่อมสายสัญญาณ/โครงข่าย และระบบไฟฟ้า เป็นค่าใช้จ่ายหลักของระบบ CCTV ในรอบ 3 ปี คิดเป็นมากกว่าครึ่งหนึ่งของงบซ่อมทั้งหมด หากหน่วยงานสามารถลดปัญหาสายสัญญาณซ้ำซากได้ จะช่วยลดภาระงบซ่อมโดยรวมได้มากกว่าการซ่อมเฉพาะตัวกล้อง จึงควรพิจารณาจัดทำแผนบำรุงรักษาและปรับปรุงโครงข่ายสายสัญญาณเป็นโครงการเฉพาะ
+                </div>
+            </div>
+
+            <!-- KPIs specific to Cabling -->
+            <div class="grid-cabling-kpis">
+                <!-- KPI 1: Total Budget (Highlighted as Cost Driver) -->
+                <div class="kpi-card kpi-blue pulse-warning cabling-card-highlight">
+                    <div class="badge-cost-driver">
+                        <i data-lucide="alert-triangle" size="10"></i>
+                        <span>Cost Driver หลัก</span>
+                    </div>
+                    <div class="kpi-icon-container" style="background-color: var(--accent-red);">
+                        <i data-lucide="coins" size="22"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-label">งบซ่อมสายสัญญาณรวม</span>
+                        <div class="kpi-value-container">
+                            <span class="kpi-value" id="cab-kpi-budget">3.477</span>
+                            <span class="kpi-unit">ล้านบาท</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Budget Ratio -->
+                <div class="kpi-card kpi-indigo">
+                    <div class="kpi-icon-container">
+                        <i data-lucide="pie-chart" size="22"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-label">สัดส่วนต่องบซ่อมทั้งหมด</span>
+                        <div class="kpi-value-container">
+                            <span class="kpi-value" id="cab-kpi-ratio">61.3</span>
+                            <span class="kpi-unit">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Cameras Affected -->
+                <div class="kpi-card kpi-teal">
+                    <div class="kpi-icon-container">
+                        <i data-lucide="cctv" size="22"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-label">กล้องที่ได้รับผลกระทบ</span>
+                        <div class="kpi-value-container">
+                            <span class="kpi-value" id="cab-kpi-cameras">275</span>
+                            <span class="kpi-unit">กล้อง</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Average Cost per Camera -->
+                <div class="kpi-card kpi-gold">
+                    <div class="kpi-icon-container">
+                        <i data-lucide="calculator" size="22"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-label">ค่าใช้จ่ายเฉลี่ยต่อกล้อง</span>
+                        <div class="kpi-value-container">
+                            <span class="kpi-value" id="cab-kpi-avg" style="font-size: 1.35rem;">12,643</span>
+                            <span class="kpi-unit">บาท/กล้อง</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 5: Highest Year & High Risk Area -->
+                <div class="kpi-card kpi-blue">
+                    <div class="kpi-icon-container">
+                        <i data-lucide="calendar" size="22"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-label">ปีที่สูงที่สุด / พื้นที่เสี่ยงสูง</span>
+                        <div class="kpi-value-container" style="display:flex; flex-direction:column; gap:2px; margin-top:2px;">
+                            <span style="font-weight: 700; color: var(--primary); font-size:1.1rem; line-height:1;">ปี 2569 (2.51M)</span>
+                            <span style="font-size:0.7rem; font-weight:600; color: var(--text-secondary);">แยกไฟแดง / ทางสาธารณะ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator and Dynamic Insights Row -->
+            <div class="cabling-charts-row">
+                <!-- Cabling Scenario Simulator -->
+                <div class="dashboard-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="sliders"></i>
+                            <span>Scenario จำลองการลดค่าซ่อมสายสัญญาณ</span>
+                        </h2>
+                    </div>
+                    <p class="scenario-desc">จำลองการปรับปรุงเชิงป้องกันและการจัดระเบียบสายสัญญาณเพื่อวิเคราะห์ผลประหยัดงบประมาณภาพรวมของเทศบาลนครนครสวรรค์</p>
+                    <div class="cabling-sim-controls">
+                        <div class="cabling-sim-left">
+                            <span class="filter-label">เลือกอัตราการลดงบ:</span>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn-sim-pct active" onclick="simulateCablingReduction(0)" id="cab-sim-0">ไม่ลด</button>
+                                <button class="btn-sim-pct" onclick="simulateCablingReduction(10)" id="cab-sim-10">ลด 10%</button>
+                                <button class="btn-sim-pct" onclick="simulateCablingReduction(20)" id="cab-sim-20">ลด 20%</button>
+                                <button class="btn-sim-pct" onclick="simulateCablingReduction(30)" id="cab-sim-30">ลด 30%</button>
+                            </div>
+                        </div>
+                        <div class="font-outfit" style="text-align: right; font-weight: 700; color: var(--accent-green); font-size: 0.95rem;" id="cab-sim-savings">
+                            ประหยัดได้: 0 บาท
+                        </div>
+                    </div>
+                    <div class="insight-box" style="margin-top: 10px; background-color: var(--insight-bg); border-color: #bee3f8;">
+                        <div class="insight-icon-container" style="background-color: #bee3f8; color: var(--accent-blue);">
+                            <i data-lucide="sparkles" size="18"></i>
+                        </div>
+                        <div style="font-size:0.82rem;" id="cab-sim-insight-text">
+                            <b>สถานะปัจจุบัน:</b> ดำเนินการซ่อมสายสัญญาณตามรอบความเสียหายจริง หากเริ่มทำการ PM หรือวางระบบป้องกันถาวรจะส่งผลในการประหยัดงบประมาณสะสมได้ทันที
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cabling Executive Insights Card -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="sparkles"></i>
+                            <span>การวิเคราะห์ข้อมูลและ Insight สำหรับผู้บริหาร</span>
+                        </h2>
+                    </div>
+                    <ul class="guide-list" style="display:flex; flex-direction:column; gap:10px; font-size:0.82rem; color: var(--text-secondary);">
+                        <li><strong style="color:var(--primary);">ภาระงบประมาณหลัก:</strong> งานสายสัญญาณและระบบไฟฟ้าสะสม 3 ปีใช้งบสูงที่สุด คิดเป็น <b>61.3%</b> ของงบซ่อมทั้งหมด การลดงบซ่อมส่วนนี้ส่งผลกระทบโดยตรงต่อประสิทธิภาพการใช้งบรวม</li>
+                        <li><strong style="color:var(--primary);">สะท้อนสภาพโครงข่าย:</strong> ปัญหาสายสัญญาณล่มบ่อยในจุดเดิม บ่งชี้ว่าโครงข่ายเดิมเริ่มเสื่อมสภาพ ขาดการป้องกันไฟกระชาก/ระบบฟ้าผ่าที่ดี หรือกิ่งไม้พาดทับเป็นประจำ</li>
+                        <li><strong style="color:var(--primary);">การแยกส่วนบัญชี:</strong> ควรมีการจัดทำรหัสควบคุมและแยกส่วนคำสั่งงบจ้าง "ซ่อมสายสัญญาณหลัก" ออกจากงบจ้าง "ซ่อมกล้องเสีย" ให้ชัดเจนในระดับกองช่าง</li>
+                        <li><strong style="color:var(--primary);">เปลี่ยนผ่านสู่ PM:</strong> ควรปรับเปลี่ยนจากการซ่อมรายครั้งแบบฉุกเฉิน (Reactive) มาเป็นสัญญารักษาโครงข่ายเชิงป้องกันแบบเหมารวมรายปี (Preventative Maintenance)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Visual Charts Grid (6 charts) -->
+            <div class="cabling-charts-row">
+                <!-- Chart 1: Yearly Cabling Budget Comparison -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="bar-chart-2"></i>
+                            <span>งบประมาณซ่อมสายสัญญาณ รายปี (เปรียบเทียบ)</span>
+                        </h2>
+                    </div>
+                    <div id="cab-chart-yearly-bar" style="min-height: 220px;"></div>
+                </div>
+
+                <!-- Chart 2: Donut Budget share -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="pie-chart"></i>
+                            <span>สัดส่วนงบสายสัญญาณ เทียบกับหมวดอื่น</span>
+                        </h2>
+                    </div>
+                    <div id="cab-chart-donut-share" style="min-height: 220px;"></div>
+                </div>
+            </div>
+
+            <div class="cabling-charts-row">
+                <!-- Chart 3: Line Chart (3-Year trend) -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="trending-up"></i>
+                            <span>แนวโน้มการเปลี่ยนแปลงค่าซ่อมสายสัญญาณ (3 ปี)</span>
+                        </h2>
+                    </div>
+                    <div id="cab-chart-trend-line" style="min-height: 220px;"></div>
+                </div>
+
+                <!-- Chart 4: Scatter Plot (Budget/Camera comparison) -->
+                <div class="dashboard-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="compass"></i>
+                            <span>เปรียบเทียบงบประมาณซ่อมสายสัญญาณ ต่อจำนวนกล้อง</span>
+                        </h2>
+                    </div>
+                    <div id="cab-chart-scatter-plot" style="min-height: 220px;"></div>
+                </div>
+            </div>
+
+            <div class="cabling-charts-row">
+                <!-- Chart 5: Heatmap of repeated network problems -->
+                <div class="dashboard-card heatmap-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="flame"></i>
+                            <span>จุดที่ปัญหาสายสัญญาณซ้ำซาก และคะแนนความเสี่ยงเชิงพื้นที่ (Heatmap)</span>
+                        </h2>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap:16px; align-items: center;">
+                        <div id="cab-chart-heatmap-risk" style="min-height: 220px;"></div>
+                        <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.5;">
+                            <strong>หมายเหตุการประเมินความเสี่ยงเชิงพื้นที่:</strong>
+                            <ul style="margin-left: 14px; margin-top: 6px; display:flex; flex-direction:column; gap:6px;">
+                                <li><strong style="color:var(--accent-red);">เสี่ยงสูงสุด (Critical):</strong> โหนดกล้องจราจรและแยกหลัก (เช่น สะพานเดชาติวงศ์) เนื่องจากไฟดับจากฟ้าผ่าบ่อย กระทบเครือข่ายเป็นทอด</li>
+                                <li><strong style="color:var(--accent-orange);">เสี่ยงสูง (High):</strong> พื้นที่จัดงานและสวนสาธารณะ (เช่น อุทยานสวรรค์, สนามกีฬา) มีความชื้นสูงและกิ่งไม้พาดทับสายสัญญาณบนเสาไฟบ่อย</li>
+                                <li><strong>เสี่ยงปานกลาง (Medium):</strong> แถบศูนย์บริการและอาคารสาธารณะ (เช่น สภ.เมืองนครสวรรค์) มักเจอปัญหาช่วงงานปรับปรุงทางเท้าหรือรื้อถอนแนวสายเดิม</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cabling-charts-row">
+                <!-- Chart 6: Pareto Chart (Project Contribution analysis) -->
+                <div class="dashboard-card heatmap-card">
+                    <div class="card-title-bar">
+                        <h2 class="card-title">
+                            <i data-lucide="trending-down"></i>
+                            <span>Pareto Chart: ต้นเหตุหลักการใช้งบซ่อมสายสัญญาณ (รายโครงการ)</span>
+                        </h2>
+                    </div>
+                    <div id="cab-chart-pareto-analysis" style="min-height: 240px;"></div>
+                </div>
+            </div>
+
+            <!-- Risk Scorecard -->
+            <div class="risk-card">
+                <div class="risk-header-cabling">
+                    <h2 class="card-title">
+                        <i data-lucide="shield-alert"></i>
+                        <span>คะแนนประเมินความเสี่ยงสายสัญญาณเชิงโครงสร้าง (Risk Score)</span>
+                    </h2>
+                    <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;">เกณฑ์ประเมินรวม</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 280px 1fr; gap:20px; align-items: center;">
+                    <div class="risk-meter-container">
+                        <div class="risk-gauge" id="cab-risk-gauge">
+                            <div class="risk-gauge-val" id="cab-risk-score">82</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:2px;">
+                            <span style="font-weight:700; color:var(--accent-red); font-size:1.05rem;">ความเสี่ยงระดับสูงมาก</span>
+                            <span style="font-size:0.74rem; color:var(--text-secondary);">จัดเป็นโหนดหลักที่ต้องปรับปรุงถาวร</span>
+                        </div>
+                    </div>
+                    <div class="risk-factors-grid">
+                        <div class="risk-factor-item">
+                            <span class="risk-factor-label">งบประมาณสะสม</span>
+                            <span class="risk-factor-val" style="color:var(--accent-red);">3.47 ล้าน (สูงสุด)</span>
+                        </div>
+                        <div class="risk-factor-item">
+                            <span class="risk-factor-label">กล้องได้รับผลกระทบ</span>
+                            <span class="risk-factor-val" style="color:var(--accent-orange);">275 กล้อง (70%)</span>
+                        </div>
+                        <div class="risk-factor-item">
+                            <span class="risk-factor-label">ความถี่ประวัติเสียหาย</span>
+                            <span class="risk-factor-val">ขัดข้องเฉลี่ยรายเดือน</span>
+                        </div>
+                        <div class="risk-factor-item">
+                            <span class="risk-factor-label">ภัยคุกคามหลัก</span>
+                            <span class="risk-factor-val" style="font-size: 0.82rem;">ไฟฟ้ากระชาก / กิ่งไม้ทับ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Proposal Options (3-choices tabs) -->
+            <div class="dashboard-card">
+                <div class="card-title-bar">
+                    <h2 class="card-title">
+                        <i data-lucide="presentation"></i>
+                        <span>ข้อเสนอเชิงยุทธศาสตร์และแผนจัดสรรงบประมาณ (3 ทางเลือกเฉพาะสายสัญญาณ)</span>
+                    </h2>
+                </div>
+                <div class="proposal-grid">
+                    <!-- Option 1 -->
+                    <div class="proposal-card">
+                        <div class="proposal-title">
+                            <span class="proposal-badge">ทางเลือก 1</span>
+                            <span>ซ่อมเฉพาะจุดเสียหายเร่งด่วน</span>
+                        </div>
+                        <p class="proposal-desc">
+                            เน้นซ่อมแซมแก้ไขเฉพาะหน้าเมื่อสายสัญญาณใยแก้วขาดหรือระบบจ่ายไฟชำรุดในจุดสำคัญระดับวิกฤต เช่น บริเวณแยกจราจรเดชาติวงศ์ หรืออาคาร สภ. เพื่อให้กล้องกลับมารันภาพได้รวดเร็ว เหมาะสำหรับยามที่ข้อจำกัดงบประมาณสูง
+                        </p>
+                        <div class="proposal-footer">
+                            <span style="color:var(--text-secondary);">ความคุ้มค่า: ต่ำ (มีความเสี่ยงซ่อมซ้ำ)</span>
+                            <span style="color:var(--accent-orange); font-weight:700;">งบเฉลี่ย: 100K-300K/ปี</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 2 -->
+                    <div class="proposal-card" style="border-color: var(--accent-blue); background-color: var(--insight-bg);">
+                        <div class="proposal-title">
+                            <span class="proposal-badge" style="background-color: var(--accent-blue); color: white;">ทางเลือก 2 (แนะนำ)</span>
+                            <span>แผนบำรุงรักษาเชิงป้องกัน (PM)</span>
+                        </div>
+                        <p class="proposal-desc">
+                            จัดทำการจ้างบำรุงรักษาเชิงป้องกัน (Preventative Maintenance) รายปีแบบเหมารวม เข้าตรวจเช็คสายหลัก (Backbone), รอยเชื่อมต่อ (Splicing Box), คอนเวอร์เตอร์, และตู้คอนโทรล รายไตรมาส ป้องกันปัญหาสายตกท้องช้างและแมลงแทะ
+                        </p>
+                        <div class="proposal-footer">
+                            <span style="color:var(--primary);">ความคุ้มค่า: สูง (ลดการเกิดเหตุซ้ำ 40%)</span>
+                            <span style="color:var(--primary); font-weight:700;">งบเฉลี่ย: 400K-600K/ปี</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 3 -->
+                    <div class="proposal-card">
+                        <div class="proposal-title">
+                            <span class="proposal-badge">ทางเลือก 3</span>
+                            <span>ปรับปรุงระบบโครงข่ายถาวร</span>
+                        </div>
+                        <p class="proposal-desc">
+                            ยกระดับโครงสร้างเครือข่ายใยแก้วแบบบูรณาการ จัดระเบียบสายพาดเสาไฟฟ้าร่วมกับหน่วยงานอื่น (กฟภ. / เอกชน), เดินระบบท่อร้อยสายใต้ดินแนววิกฤต, เพิ่มชุดป้องกันไฟกระชาก (Surge Protector) และทำระบบแผนที่สาย (GIS Digital Map)
+                        </p>
+                        <div class="proposal-footer">
+                            <span style="color:var(--text-secondary);">ความคุ้มค่า: สูงสุดในระยะยาว (10 ปี)</span>
+                            <span style="color:var(--primary-light); font-weight:700;">งบลงทุนเริ่มแรกสูง (2.5M)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Analysis Table Card -->
+            <div class="dashboard-card" style="margin-bottom: 24px;">
+                <div class="card-title-bar">
+                    <h2 class="card-title">
+                        <i data-lucide="table"></i>
+                        <span>ตารางแสดงรายการและวิเคราะห์ต้นทุนสายสัญญาณรายโครงการ (Cost analysis)</span>
+                    </h2>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="cabling-data-table" style="font-size:0.8rem;">
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">ปีงบประมาณ</th>
+                                <th style="min-width: 180px;">ชื่อโครงการ</th>
+                                <th style="min-width: 140px;">พื้นที่ดำเนินการ</th>
+                                <th style="width: 80px; text-align:right;">จำนวนกล้อง</th>
+                                <th style="width: 110px; text-align:right;">งบซ่อมสายสัญญาณ (บาท)</th>
+                                <th style="width: 100px; text-align:right;">งบเฉลี่ยต่อกล้อง</th>
+                                <th style="min-width: 130px;">สาเหตุหลักของปัญหา</th>
+                                <th style="min-width: 130px;">ความเสี่ยงหากละเลย</th>
+                                <th style="min-width: 140px;">ข้อเสนอแนวทางแก้ไข</th>
+                                <th style="width: 80px;">ระดับความเร่งด่วน</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cabling-table-body">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+
+          </div> <!-- End Cabling View -->
+
+      </div> <!-- End App Container -->
+
+    <!-- Interactive Drill-down Modal -->
+    <div class="modal-overlay" id="project-detail-modal" onclick="closeProjectModal(event)">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <span class="modal-badge" id="modal-project-year">โครงการปี 2567</span>
+                    <h2 class="modal-title" id="modal-project-name">ซ่อมระบบกล้อง CCTV ระยะที่ 3, 4, 5</h2>
+                </div>
+                <button class="btn-close-modal" onclick="toggleModal(false)">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Quick Info Cards -->
+                <div class="modal-info-grid">
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">งบประมาณโครงการ</span>
+                        <span class="modal-info-value" id="modal-project-budget">454,000 บาท</span>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">ประเภทงานหลัก</span>
+                        <span class="modal-info-value" id="modal-project-jobtype">งานซ่อมระบบกล้อง</span>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">จำนวนกล้อง / เสา</span>
+                        <span class="modal-info-value" id="modal-project-targets">32 กล้อง / - เสา</span>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">วิธีจัดซื้อจัดจ้าง</span>
+                        <span class="modal-info-value" id="modal-project-procure">เฉพาะเจาะจง</span>
+                    </div>
+                </div>
+
+                <!-- Content Columns -->
+                <div class="modal-split-grid">
+                    <!-- Left: Location and Details -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div>
+                            <h3 class="modal-section-title">
+                                <i data-lucide="map-pin" size="16"></i>
+                                <span>พื้นที่ดำเนินการ (พิกัดแผนที่โดยประมาณ)</span>
+                            </h3>
+                            <!-- Map Representation -->
+                            <div class="simulated-map" id="modal-map">
+                                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80" alt="Mock Map" class="map-bg">
+                                <div class="map-pin">
+                                    <i data-lucide="map-pin" size="24" fill="#ef4444" stroke="#ffffff"></i>
+                                    <div class="map-pin-label" id="modal-map-pin-label">บริเวณ สภ.เมืองนครสวรรค์</div>
+                                </div>
+                                <div class="map-coords" id="modal-map-coords">15.7042, 100.1368</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="modal-section-title">
+                                <i data-lucide="clipboard" size="16"></i>
+                                <span>ขอบเขตงานและจุดดำเนินการหลัก</span>
+                            </h3>
+                            <div style="background-color: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;" id="modal-project-desc">
+                                ดำเนินการตรวจสอบ แก้ไขระบบการรับส่งภาพของกล้อง CCTV ในระยะที่ 3, 4, 5 ครอบคลุมพื้นที่แยกสำคัญกลางเมือง เพื่อให้สามารถใช้งานเชื่อมโยงศูนย์รับสัญญาณของหน่วยงานได้อย่างสมบูรณ์
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Technical Logs and Mockup Photos -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div>
+                            <h3 class="modal-section-title">
+                                <i data-lucide="activity" size="16"></i>
+                                <span>บันทึกความคืบหน้าเชิงเทคนิค</span>
+                            </h3>
+                            <!-- Timeline logs -->
+                            <div class="tech-logs" id="modal-tech-logs">
+                                <div class="log-item">
+                                    <div class="log-dot log-success"></div>
+                                    <div class="log-content">
+                                        <span class="log-time">14/08/2567 15:30</span>
+                                        <span class="log-text">ทดสอบระบบสัญญาณ และส่งมอบงาน</span>
+                                        <span class="log-tech">ช่างเทคนิค: พัชรพล แสงทอง</span>
+                                    </div>
+                                </div>
+                                <div class="log-item">
+                                    <div class="log-dot log-success"></div>
+                                    <div class="log-content">
+                                        <span class="log-time">10/08/2567 11:00</span>
+                                        <span class="log-text">เปลี่ยนบอร์ดกล้องและโมดูลการจ่ายไฟ</span>
+                                        <span class="log-tech">ช่างเทคนิค: สมชาย ใจดี</span>
+                                    </div>
+                                </div>
+                                <div class="log-item">
+                                    <div class="log-dot log-success"></div>
+                                    <div class="log-content">
+                                        <span class="log-time">05/08/2567 09:30</span>
+                                        <span class="log-text">เข้าสำรวจหน้างาน ตรวจเช็คกระแสไฟ</span>
+                                        <span class="log-tech">ช่างเทคนิค: มานะ มั่นคง</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="modal-section-title">
+                                <i data-lucide="image" size="16"></i>
+                                <span>ภาพถ่ายงานบำรุงรักษา</span>
+                            </h3>
+                            <!-- Photo Gallery -->
+                            <div class="gallery-grid">
+                                <div class="gallery-card">
+                                    <div class="gallery-badge">ก่อนซ่อม</div>
+                                    <img id="modal-img-before" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80" alt="Before Repair">
+                                </div>
+                                <div class="gallery-card">
+                                    <div class="gallery-badge" style="background-color: var(--accent-green);">หลังซ่อม</div>
+                                    <img id="modal-img-after" src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=300&q=80" alt="After Repair">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Modal Body -->
         </div>
-      </section>
+    </div> <!-- End Modal Overlay -->
 
-      <section class="panel detail-panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">รายละเอียดรายการที่เลือก</h2>
-            <p class="panel-note">คลิกแถวในตารางเพื่อดูงบ ประเภทงาน และพื้นที่</p>
-          </div>
-        </div>
-        <div class="detail-body" id="detailBody"></div>
-      </section>
-
-      <section class="panel table-panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">รายละเอียดโครงการซ่อม</h2>
-            <p class="panel-note">ใช้ตรวจสอบรายการจริงจากรายงาน และดูความเชื่อมโยงกับประเภทงานซ่อม</p>
-          </div>
-        </div>
-        <div class="table-wrap" id="tableWrap"></div>
-      </section>
-
-      <section class="panel roadmap-panel">
-        <div class="panel-head">
-          <div>
-            <h2 class="panel-title">แนวทางจัดทำงบประมาณ 3 ระยะ</h2>
-            <p class="panel-note">ย้ายจากซ่อมรายครั้ง ไปสู่ระบบดูแลเชิงป้องกัน</p>
-          </div>
-        </div>
-        <div class="roadmap">
-          <article class="horizon short">
-            <h3>ระยะสั้น (0-1 ปี)</h3>
-            <ul>
-              <li>สำรวจจุดเสี่ยงและจุดซ่อมบ่อย</li>
-              <li>บำรุงรักษาเชิงป้องกัน</li>
-              <li>จัดลำดับจุดสำคัญต่อประชาชน</li>
-              <li>แก้ไขจุดกระทบการใช้งานหลัก</li>
-            </ul>
-          </article>
-          <article class="horizon mid">
-            <h3>ระยะกลาง (1-3 ปี)</h3>
-            <ul>
-              <li>ปรับปรุงสายสัญญาณและระบบไฟฟ้า</li>
-              <li>รวมงานซ่อมเป็นสัญญาดูแล</li>
-              <li>กำหนด SLA และ KPI</li>
-              <li>วางงบตามความเสี่ยงของพื้นที่</li>
-            </ul>
-          </article>
-          <article class="horizon long">
-            <h3>ระยะยาว (3 ปีขึ้นไป)</h3>
-            <ul>
-              <li>วางแผนทดแทนอุปกรณ์ตามอายุใช้งาน</li>
-              <li>กำหนดมาตรฐานอุปกรณ์</li>
-              <li>สร้างศูนย์ข้อมูลหรือ monitoring</li>
-              <li>ลดซ่อมฉุกเฉิน เพิ่มความมั่นคงระบบ</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-    </section>
-
-    <p class="footer-note">
-      แหล่งข้อมูล: รายงานซ่อมกล้อง CCTV พ.ศ. 2567-2569 และอินโฟกราฟิกเดิมในโฟลเดอร์งาน. คำว่า “งานสายสัญญาณ/โครงข่าย” ใช้เพื่อสื่อสารเชิงบริหารจากรายการในรายงานที่ระบุ “สายสัญญาณและระบบไฟฟ้า”; รายงานไม่ได้แจกแจงอาการเสียรายกล้องหรือระบุไฟเบอร์เป็นรายการแยก. เครดิต: นักวิชาการคอมพิวเตอร์
-    </p>
-  </main>
-</div>
-
-<script>
-const projects = [
-  {
-    id: 1,
-    year: 2567,
-    order: 1,
-    title: "เคลื่อนย้ายอุปกรณ์และเดินสายส่งสัญญาณ ที่สถานีตำรวจภูธรเมืองนครสวรรค์",
-    category: "ย้าย/เดินสายส่งสัญญาณ",
-    categoryShort: "ย้าย/เดินสาย",
-    cameras: 0,
-    poles: 0,
-    budget: 163000,
-    method: "เฉพาะเจาะจง",
-    areas: "สภ.เมืองนครสวรรค์",
-    note: "ไม่มีจำนวนกล้องในรายงาน"
-  },
-  {
-    id: 2,
-    year: 2567,
-    order: 2,
-    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 3, 4 และ 5",
-    category: "ซ่อมระบบกล้อง",
-    categoryShort: "ซ่อมระบบกล้อง",
-    cameras: 32,
-    poles: 0,
-    budget: 454000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 3, 4, 5",
-    note: "ซ่อมระบบกล้องตามรายงาน"
-  },
-  {
-    id: 3,
-    year: 2567,
-    order: 3,
-    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 2, 3, 4, 6 และ 8",
-    category: "ซ่อมระบบกล้อง",
-    categoryShort: "ซ่อมระบบกล้อง",
-    cameras: 11,
-    poles: 0,
-    budget: 320000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 2, 3, 4, 6, 8",
-    note: "ซ่อมระบบกล้องตามรายงาน"
-  },
-  {
-    id: 4,
-    year: 2567,
-    order: 4,
-    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 2, 3, 4, 6, 7, อุทยานสวรรค์ 1 และ 2",
-    category: "ซ่อมระบบกล้อง",
-    categoryShort: "ซ่อมระบบกล้อง",
-    cameras: 38,
-    poles: 0,
-    budget: 488000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 2, 3, 4, 6, 7, อุทยานสวรรค์ 1 และ 2",
-    note: "ซ่อมระบบกล้องตามรายงาน"
-  },
-  {
-    id: 5,
-    year: 2567,
-    order: 5,
-    title: "ซ่อมแซมระบบกล้องโทรทัศน์วงจรปิด ระยะที่ 1-7 และสถานีขนส่ง",
-    category: "ซ่อมระบบกล้อง",
-    categoryShort: "ซ่อมระบบกล้อง",
-    cameras: 38,
-    poles: 0,
-    budget: 475000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 1-7, สถานีขนส่ง",
-    note: "ซ่อมระบบกล้องตามรายงาน"
-  },
-  {
-    id: 6,
-    year: 2568,
-    order: 1,
-    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิด ระยะที่ 1, 2, 3, 4, 6 และ 7",
-    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
-    categoryShort: "สายสัญญาณ/ไฟฟ้า",
-    cameras: 20,
-    poles: 0,
-    budget: 483000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 1, 2, 3, 4, 6, 7",
-    note: "ในรายงานใช้คำว่า สายสัญญาณและระบบไฟฟ้า"
-  },
-  {
-    id: 7,
-    year: 2568,
-    order: 2,
-    title: "จ้างติดแถบสีสายสัญญาณเครือข่ายเทศบาลนครนครสวรรค์",
-    category: "ติดแถบสีสายสัญญาณ",
-    categoryShort: "ติดแถบสี",
-    cameras: 0,
-    poles: 870,
-    budget: 295000,
-    method: "เฉพาะเจาะจง",
-    areas: "เครือข่ายเทศบาล 870 เสา",
-    note: "เป็นจำนวนเสา ไม่ใช่จำนวนกล้อง"
-  },
-  {
-    id: 8,
-    year: 2568,
-    order: 3,
-    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิด ระยะที่ 3, 4, 5, 6, 8 และพื้นที่สำคัญ",
-    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
-    categoryShort: "สายสัญญาณ/ไฟฟ้า",
-    cameras: 25,
-    poles: 0,
-    budget: 481000,
-    method: "เฉพาะเจาะจง",
-    areas: "ระยะที่ 3, 4, 5, 6, 8, สนามกีฬากลาง, อุทยานสวรรค์ 1 และ 2, ชุมชนชอนตะวัน, กล้องจราจร",
-    note: "ในรายงานใช้คำว่า สายสัญญาณและระบบไฟฟ้า"
-  },
-  {
-    id: 9,
-    year: 2569,
-    order: 1,
-    title: "จ้างซ่อมแซมสายสัญญาณและระบบไฟฟ้ากล้องโทรทัศน์วงจรปิดภายในเขตเทศบาลนครนครสวรรค์",
-    category: "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า",
-    categoryShort: "สายสัญญาณ/ไฟฟ้า",
-    cameras: 230,
-    poles: 0,
-    budget: 2513000,
-    method: "คัดเลือก",
-    areas: "ภายในเขตเทศบาลนครนครสวรรค์",
-    note: "โครงการเดียวขนาดใหญ่ โดยวิธีคัดเลือก"
-  }
-];
-
-const categoryDescriptions = {
-  "ซ่อมระบบกล้อง": "งานที่รายงานระบุว่าเป็นการซ่อมแซมระบบกล้อง CCTV โดยตรง",
-  "งานสายสัญญาณ/โครงข่าย และระบบไฟฟ้า": "งานซ่อมสายสัญญาณ/โครงข่าย เช่น ไฟเบอร์ในเชิงสื่อสารบริหาร และระบบไฟฟ้าตามคำในรายงาน",
-  "ย้าย/เดินสายส่งสัญญาณ": "งานเคลื่อนย้ายอุปกรณ์และเดินสายส่งสัญญาณ",
-  "ติดแถบสีสายสัญญาณ": "งานระบุแนว/จัดระเบียบสายสัญญาณตามเสา"
-};
-
-const iconMap = {
-  projects: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10M7 4v16h10V4M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
-  camera: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 9h3l2-2h6l2 2h3v10H4V9Z" stroke="currentColor" stroke-width="1.8"/><path d="M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"/></svg>',
-  pole: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 8h12M8 12h8M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
-  budget: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 6c4 0 7 1.2 7 2.8S16 11.6 12 11.6 5 10.4 5 8.8 8 6 12 6Z" stroke="currentColor" stroke-width="1.8"/><path d="M5 9v6c0 1.6 3 2.8 7 2.8s7-1.2 7-2.8V9M5 12c0 1.6 3 2.8 7 2.8s7-1.2 7-2.8" stroke="currentColor" stroke-width="1.8"/></svg>',
-  savings: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 16l4-4 3 3 7-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-};
-
-const filters = {
-  year: document.getElementById("yearFilter"),
-  category: document.getElementById("categoryFilter"),
-  method: document.getElementById("methodFilter"),
-  scenario: document.getElementById("scenarioSelect"),
-  viewMode: document.getElementById("viewMode")
-};
-
-let selectedProjectId = 9;
-
-const formatMoney = value => value.toLocaleString("th-TH");
-const formatMillion = value => (value / 1000000).toLocaleString("th-TH", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
-const formatShortMillion = value => (value / 1000000).toLocaleString("th-TH", { minimumFractionDigits: value >= 1000000 ? 2 : 3, maximumFractionDigits: 3 });
-
-function uniqueCategories() {
-  return [...new Set(projects.map(p => p.category))];
-}
-
-function setupOptions() {
-  uniqueCategories().forEach(category => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-    filters.category.appendChild(option);
-  });
-}
-
-function currentData() {
-  return projects.filter(project => {
-    const yearOk = filters.year.value === "all" || String(project.year) === filters.year.value;
-    const categoryOk = filters.category.value === "all" || project.category === filters.category.value;
-    const methodOk = filters.method.value === "all" || project.method === filters.method.value;
-    return yearOk && categoryOk && methodOk;
-  });
-}
-
-function aggregate(list) {
-  return list.reduce((acc, p) => {
-    acc.projects += 1;
-    acc.cameras += p.cameras;
-    acc.poles += p.poles;
-    acc.budget += p.budget;
-    return acc;
-  }, { projects: 0, cameras: 0, poles: 0, budget: 0 });
-}
-
-function aggregateBy(list, key) {
-  const map = new Map();
-  list.forEach(item => {
-    const name = item[key];
-    if (!map.has(name)) {
-      map.set(name, { name, projects: 0, cameras: 0, poles: 0, budget: 0, rows: [] });
-    }
-    const entry = map.get(name);
-    entry.projects += 1;
-    entry.cameras += item.cameras;
-    entry.poles += item.poles;
-    entry.budget += item.budget;
-    entry.rows.push(item);
-  });
-  return [...map.values()].sort((a, b) => b.budget - a.budget);
-}
-
-function renderKpis(list) {
-  const total = aggregate(list);
-  const baseAnnual = 5672000 / 3;
-  const scenario = Number(filters.scenario.value);
-  const annualSaving = baseAnnual * scenario / 100;
-  const kpis = [
-    { label: "โครงการที่แสดง", value: total.projects, unit: "โครงการ", icon: "projects" },
-    { label: "กล้องที่เกี่ยวข้อง", value: total.cameras, unit: "กล้อง", icon: "camera" },
-    { label: "เสาที่เกี่ยวข้อง", value: total.poles, unit: "เสา", icon: "pole" },
-    { label: "งบประมาณ", value: formatShortMillion(total.budget), unit: "ล้านบาท", icon: "budget", cls: "budget" },
-    { label: `ประหยัดได้/ปี เมื่อ${scenario ? "ลด " + scenario + "%" : "ยังไม่ลด"}`, value: formatMillion(annualSaving), unit: "ล้านบาท", icon: "savings", cls: "savings" }
-  ];
-
-  document.getElementById("kpiStack").innerHTML = kpis.map(kpi => `
-    <article class="kpi-card ${kpi.cls || ""}">
-      <div class="kpi-icon">${iconMap[kpi.icon]}</div>
-      <div>
-        <div class="kpi-label">${kpi.label}</div>
-        <div class="kpi-value"><span>${kpi.value}</span><span class="kpi-unit">${kpi.unit}</span></div>
-      </div>
-    </article>
-  `).join("");
-}
-
-function renderFilterCaption() {
-  const parts = [];
-  parts.push(filters.year.value === "all" ? "รวมข้อมูล 3 ปี" : `เฉพาะ พ.ศ. ${filters.year.value}`);
-  if (filters.category.value !== "all") parts.push(filters.category.value);
-  if (filters.method.value !== "all") parts.push(`วิธี${filters.method.value}`);
-  document.getElementById("filterCaption").textContent = parts.join(" | ");
-}
-
-function renderAnnualChart(list) {
-  const byYear = [2567, 2568, 2569].map(year => {
-    const rows = list.filter(p => p.year === year);
-    return { year, ...aggregate(rows) };
-  });
-  const maxBudget = Math.max(2513000, ...byYear.map(y => y.budget), 1);
-  const maxCamera = Math.max(230, ...byYear.map(y => y.cameras), 1);
-  document.getElementById("annualBars").innerHTML = byYear.map(item => {
-    const h = Math.max(0, Math.round(item.budget / maxBudget * 210));
-    const dot = Math.max(18, Math.round(item.cameras / maxCamera * 204));
-    return `
-      <div class="year-col">
-        <div class="budget-bar" style="height:${h}px;--h:${h}px"></div>
-        <div class="bar-val" style="--h:${h}px">${item.budget ? formatShortMillion(item.budget) : "-"}</div>
-        <div class="camera-dot" style="--dot:${dot}px"></div>
-        <div class="camera-val" style="--dot:${dot}px">${item.cameras || "-"}</div>
-        <div class="year-label">${item.year}</div>
-      </div>
-    `;
-  }).join("");
-
-  const all = aggregate(list);
-  const cpCamera = all.cameras ? Math.round(all.budget / all.cameras) : null;
-  const insight = cpCamera
-    ? `<strong>ข้อสังเกต:</strong> ชุดข้อมูลที่เลือกใช้งบ ${formatMoney(all.budget)} บาท ครอบคลุม ${all.cameras} กล้อง เฉลี่ยประมาณ ${formatMoney(cpCamera)} บาท/กล้อง`
-    : `<strong>ข้อสังเกต:</strong> ชุดข้อมูลที่เลือกไม่มีจำนวนกล้องโดยตรง จึงควรอ่านเป็นงานโครงข่าย/งานสนับสนุน ไม่ใช่ต้นทุนต่อกล้อง`;
-  document.getElementById("trendInsight").innerHTML = insight;
-}
-
-function renderCategoryBars(list) {
-  const rows = aggregateBy(list, "category");
-  const max = Math.max(...rows.map(r => r.budget), 1);
-  const total = aggregate(list).budget || 1;
-
-  if (!rows.length) {
-    document.getElementById("categoryBars").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
-    return;
-  }
-
-  document.getElementById("categoryBars").innerHTML = rows.map(row => {
-    const pctWidth = Math.max(5, row.budget / max * 100);
-    const share = row.budget / total * 100;
-    const meta = [
-      row.cameras ? `${row.cameras} กล้อง` : null,
-      row.poles ? `${row.poles} เสา` : null,
-      `${row.projects} รายการ`
-    ].filter(Boolean).join(" | ");
-    return `
-      <div class="rank-row" title="${categoryDescriptions[row.name] || row.name}">
-        <div>
-          <div class="rank-name">${row.name}</div>
-          <div class="rank-meta">${meta}</div>
-        </div>
-        <div class="track"><div class="fill" style="width:${pctWidth}%">${share.toFixed(1)}%</div></div>
-        <div class="rank-money">${formatMoney(row.budget)} บาท</div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderScenario() {
-  const baseAnnual = 5672000 / 3;
-  const selected = Number(filters.scenario.value);
-  const scenarios = [0, 20, 35, 50];
-  document.getElementById("baseAnnual").textContent = formatMillion(baseAnnual);
-  document.getElementById("savingAnnual").textContent = formatMillion(baseAnnual * selected / 100);
-  document.getElementById("savingThreeYears").textContent = formatMillion(baseAnnual * selected / 100 * 3);
-
-  document.getElementById("scenarioRows").innerHTML = scenarios.map(pct => {
-    const after = baseAnnual * (1 - pct / 100);
-    const annual = baseAnnual * pct / 100;
-    const threeYears = annual * 3;
-    return `
-      <tr class="${pct === selected ? "active" : ""}">
-        <td>${pct ? "ลด " + pct + "%" : "ฐานข้อมูลเดิม"}</td>
-        <td>${formatMillion(after)}</td>
-        <td>${pct ? formatMillion(annual) : "-"}</td>
-        <td>${pct ? formatMillion(threeYears) : "-"}</td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function renderDetail(list) {
-  const selected = projects.find(p => p.id === selectedProjectId) || list[0] || projects[0];
-  if (!selected) {
-    document.getElementById("detailBody").innerHTML = '<div class="empty">ไม่มีข้อมูล</div>';
-    return;
-  }
-  document.getElementById("detailBody").innerHTML = `
-    <h3 class="detail-title">${selected.title}</h3>
-    <div class="detail-tags">
-      <span class="tag">พ.ศ. ${selected.year}</span>
-      <span class="tag">${selected.category}</span>
-      <span class="tag">วิธี${selected.method}</span>
-    </div>
-    <div class="detail-grid">
-      <div class="mini"><b>${formatMoney(selected.budget)}</b><span>บาท</span></div>
-      <div class="mini"><b>${selected.cameras || "-"}</b><span>กล้อง</span></div>
-      <div class="mini"><b>${selected.poles || "-"}</b><span>เสา</span></div>
-    </div>
-    <p class="panel-note" style="margin-top:10px"><strong>พื้นที่/ระยะ:</strong> ${selected.areas}</p>
-    <p class="panel-note"><strong>หมายเหตุ:</strong> ${selected.note}</p>
-  `;
-}
-
-function renderProjectTable(list) {
-  if (!list.length) {
-    document.getElementById("tableWrap").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
-    return;
-  }
-  document.getElementById("tableWrap").innerHTML = `
-    <table class="report-table">
-      <thead>
-        <tr>
-          <th>ปี</th>
-          <th>ลำดับ</th>
-          <th>ชื่อโครงการ/รายการซ่อม</th>
-          <th>ประเภทงานหลัก</th>
-          <th>กล้อง</th>
-          <th>เสา</th>
-          <th>งบประมาณ</th>
-          <th>วิธี</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${list.map(p => `
-          <tr data-id="${p.id}" class="${p.id === selectedProjectId ? "selected" : ""}">
-            <td>${p.year}</td>
-            <td>${p.order}</td>
-            <td>${p.title}</td>
-            <td><span class="category-pill">${p.categoryShort}</span></td>
-            <td class="num">${p.cameras || "-"}</td>
-            <td class="num">${p.poles || "-"}</td>
-            <td class="num">${formatMoney(p.budget)}</td>
-            <td>${p.method}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-  document.querySelectorAll(".report-table tbody tr").forEach(row => {
-    row.addEventListener("click", () => {
-      selectedProjectId = Number(row.dataset.id);
-      renderAll();
-    });
-  });
-}
-
-function renderCategoryTable(list) {
-  const rows = aggregateBy(list, "category");
-  if (!rows.length) {
-    document.getElementById("tableWrap").innerHTML = '<div class="empty">ไม่มีข้อมูลตามตัวกรอง</div>';
-    return;
-  }
-  document.getElementById("tableWrap").innerHTML = `
-    <table class="report-table">
-      <thead>
-        <tr>
-          <th>ประเภทงาน</th>
-          <th>ความหมายใน dashboard</th>
-          <th>จำนวนรายการ</th>
-          <th>กล้อง</th>
-          <th>เสา</th>
-          <th>งบประมาณ</th>
-          <th>สัดส่วน</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(row => {
-          const total = aggregate(list).budget || 1;
-          return `
-            <tr>
-              <td><span class="category-pill">${row.name}</span></td>
-              <td>${categoryDescriptions[row.name] || "-"}</td>
-              <td class="num">${row.projects}</td>
-              <td class="num">${row.cameras || "-"}</td>
-              <td class="num">${row.poles || "-"}</td>
-              <td class="num">${formatMoney(row.budget)}</td>
-              <td class="num">${(row.budget / total * 100).toFixed(1)}%</td>
-            </tr>
-          `;
-        }).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-function renderTable(list) {
-  if (filters.viewMode.value === "category") {
-    renderCategoryTable(list);
-  } else {
-    renderProjectTable(list);
-  }
-}
-
-function renderAll() {
-  const list = currentData();
-  if (!list.some(p => p.id === selectedProjectId) && list.length) {
-    selectedProjectId = list[0].id;
-  }
-  renderFilterCaption();
-  renderKpis(list);
-  renderAnnualChart(list);
-  renderCategoryBars(list);
-  renderScenario();
-  renderDetail(list);
-  renderTable(list);
-}
-
-setupOptions();
-Object.values(filters).forEach(control => control.addEventListener("change", renderAll));
-document.getElementById("resetBtn").addEventListener("click", () => {
-  filters.year.value = "all";
-  filters.category.value = "all";
-  filters.method.value = "all";
-  filters.scenario.value = "35";
-  filters.viewMode.value = "project";
-  selectedProjectId = 9;
-  renderAll();
-});
-renderAll();
-</script>
+    <!-- Application Script -->
+    <script src="app.js"></script>
 </body>
 </html>
