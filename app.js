@@ -1258,11 +1258,11 @@ function renderCablingKPIs() {
     
     // 2. Savings indicator
     const savings = totalBudget - simBudget;
-    document.getElementById("cab-sim-savings").textContent = `ประหยัดได้: ${savings.toLocaleString()} บาท`;
+    document.getElementById("cab-sim-savings").textContent = savings > 0 ? `+ ${savings.toLocaleString()} บาท` : `+ 0 บาท`;
     
     const savingsTextDom = document.getElementById("cab-sim-savings");
-    const budgetCard = document.getElementById("cabling-budget-card");
-    const budgetBadge = document.getElementById("cabling-budget-badge");
+    const budgetCard = document.getElementById("cab-kpi-budget-card");
+    const budgetBadge = document.getElementById("cab-warning-badge");
 
     if (reduction > 0) {
         savingsTextDom.style.color = "var(--accent-green-text)";
@@ -1283,6 +1283,49 @@ function renderCablingKPIs() {
         if (budgetBadge) {
             budgetBadge.classList.remove("badge-savings");
             budgetBadge.innerHTML = `<i data-lucide="alert-triangle" size="10"></i><span>Cost Driver หลัก</span>`;
+        }
+    }
+
+    // 4. Update Risk Score Gauge
+    const baseRisk = 45;
+    const addedRisk = reduction * 1.25;
+    const totalRisk = Math.round(baseRisk + addedRisk);
+    
+    const riskScoreEl = document.getElementById("cab-risk-score");
+    const riskGaugeEl = document.getElementById("cab-risk-gauge");
+    const riskLevelEl = document.getElementById("cab-risk-level");
+    const riskDescEl = document.getElementById("cab-risk-desc");
+    
+    if (riskScoreEl) {
+        riskScoreEl.textContent = totalRisk;
+    }
+    
+    if (riskGaugeEl) {
+        let colorVar = "var(--accent-green)";
+        if (totalRisk > 75) {
+            colorVar = "var(--accent-red)";
+        } else if (totalRisk > 50) {
+            colorVar = "var(--accent-orange)";
+        }
+        riskGaugeEl.style.background = `conic-gradient(${colorVar} 0% ${totalRisk}%, var(--border-color) ${totalRisk}% 100%)`;
+        if (riskScoreEl) {
+            riskScoreEl.style.color = colorVar;
+        }
+    }
+
+    if (riskLevelEl && riskDescEl) {
+        if (totalRisk <= 50) {
+            riskLevelEl.textContent = "ความเสี่ยงระดับต่ำ";
+            riskLevelEl.style.color = "var(--accent-green-text)";
+            riskDescEl.textContent = "ระบบมีเสถียรภาพ สามารถบำรุงรักษาตามรอบปกติได้";
+        } else if (totalRisk <= 75) {
+            riskLevelEl.textContent = "ความเสี่ยงระดับปานกลาง";
+            riskLevelEl.style.color = "var(--accent-orange)";
+            riskDescEl.textContent = "เริ่มมีความเสี่ยงในบางจุดสำคัญ ควรเฝ้าระวังระบบเครือข่าย";
+        } else {
+            riskLevelEl.textContent = "ความเสี่ยงระดับสูงมาก";
+            riskLevelEl.style.color = "var(--accent-red)";
+            riskDescEl.textContent = "จัดเป็นโหนดหลักที่ต้องปรับปรุงถาวร ป้องกันระบบล่มกว้างขวาง";
         }
     }
     

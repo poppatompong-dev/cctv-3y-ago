@@ -632,8 +632,8 @@
             <!-- KPIs specific to Cabling -->
             <div class="grid-cabling-kpis">
                 <!-- KPI 1: Total Budget (Highlighted as Cost Driver) -->
-                <div class="kpi-card kpi-blue pulse-warning cabling-card-highlight" id="cabling-budget-card">
-                    <div class="badge-cost-driver" id="cabling-budget-badge">
+                <div class="kpi-card kpi-blue pulse-warning cabling-card-highlight" id="cab-kpi-budget-card">
+                    <div class="badge-cost-driver" id="cab-warning-badge">
                         <i data-lucide="alert-triangle" size="10"></i>
                         <span>Cost Driver หลัก</span>
                     </div>
@@ -728,7 +728,7 @@
                             </div>
                         </div>
                         <div class="font-outfit" style="text-align: right; font-weight: 700; color: var(--accent-green); font-size: 0.95rem;" id="cab-sim-savings">
-                            ประหยัดได้: 0 บาท
+                            + 0 บาท
                         </div>
                     </div>
                     <div class="insight-box" style="margin-top: 10px; background-color: var(--insight-bg); border-color: #bee3f8;">
@@ -871,12 +871,12 @@
                 </div>
                 <div style="display: grid; grid-template-columns: 280px 1fr; gap:20px; align-items: center;">
                     <div class="risk-meter-container">
-                        <div class="risk-gauge" id="cab-risk-gauge">
-                            <div class="risk-gauge-val" id="cab-risk-score">82</div>
+                        <div class="risk-gauge" id="cab-risk-gauge" style="background: conic-gradient(var(--accent-green) 0% 45%, var(--border-color) 45% 100%);">
+                            <div class="risk-gauge-val" id="cab-risk-score" style="color: var(--accent-green-text);">45</div>
                         </div>
                         <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span style="font-weight:700; color:var(--accent-red); font-size:1.05rem;">ความเสี่ยงระดับสูงมาก</span>
-                            <span style="font-size:0.74rem; color:var(--text-secondary);">จัดเป็นโหนดหลักที่ต้องปรับปรุงถาวร</span>
+                            <span style="font-weight:700; color:var(--accent-green-text); font-size:1.05rem;" id="cab-risk-level">ความเสี่ยงระดับต่ำ</span>
+                            <span style="font-size:0.74rem; color:var(--text-secondary);" id="cab-risk-desc">ระบบมีเสถียรภาพ สามารถบำรุงรักษาตามรอบปกติได้</span>
                         </div>
                     </div>
                     <div class="risk-factors-grid">
